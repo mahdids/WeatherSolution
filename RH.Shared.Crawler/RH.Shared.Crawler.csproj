@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RH.EntityFramework.Shared\RH.EntityFramework.Shared.csproj" />
+    <ProjectReference Include="..\RH.EntityFramework\RH.EntityFramework.csproj" />
+    <ProjectReference Include="..\RH.Shared\RH.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

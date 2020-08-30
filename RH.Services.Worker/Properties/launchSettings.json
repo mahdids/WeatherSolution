@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "RH.Services.Worker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

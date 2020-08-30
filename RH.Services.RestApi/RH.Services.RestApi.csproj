@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RH.EntityFramework\RH.EntityFramework.csproj" />
+    <ProjectReference Include="..\RH.Shared.Crawler\RH.Shared.Crawler.csproj" />
+  </ItemGroup>
+
+</Project>
