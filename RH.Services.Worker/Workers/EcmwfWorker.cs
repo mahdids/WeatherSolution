@@ -58,7 +58,7 @@ namespace RH.Services.Worker.Workers
                     {
                         while (DateTime.Now.ToWindyUnixTime(3).Start <= currentWindyTime && !stoppingToken.IsCancellationRequested)
                         {
-                            await Task.Delay(60000, stoppingToken);
+                            await Task.Delay(int.Parse(_configuration["CrawlingInterval"]), stoppingToken);
                         }
                     }
                     else

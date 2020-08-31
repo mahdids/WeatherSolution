@@ -17,4 +17,8 @@
     <ProjectReference Include="..\RH.EntityFramework.Shared\RH.EntityFramework.Shared.csproj" />
     <ProjectReference Include="..\RH.Shared.Crawler\RH.Shared.Crawler.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
 </Project>

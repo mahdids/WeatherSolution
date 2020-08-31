@@ -62,6 +62,8 @@ namespace RH.Shared.Crawler.Forecast
         public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
         {
             var time = await _ecmwfRepository.GetLastExistTime(dimension.Id);
+            if (time == null)
+                return string.Empty;
             var records = await _ecmwfRepository.GetContentByDimensionAndTime(dimension.Id, time.Id);
             if (records.Count==0)
             {
