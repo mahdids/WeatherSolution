@@ -10,6 +10,7 @@ namespace RH.EntityFramework.Repositories.Forecast.ECMWF
         Task<Shared.Entities.Ecmwf> Add(Shared.Entities.Ecmwf ecmwf);
         Task<WindyTime> GetTime(long start, short step);
         Task<WindyTime> GetLastExistTime(int dimensionId);
+        Task<List<WindyTime>> GetExistTime(int dimensionId, long prevDay, long nextDay);
         Task<List<Ecmwf>> GetContentByDimensionAndTime(int dimensionId, int timeId);
     }
 }

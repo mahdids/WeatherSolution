@@ -73,9 +73,23 @@ namespace RH.EntityFramework.Repositories.Dimension
             return false;
         }
 
-        public async Task<Shared.Entities.Dimension> GetDimension(short zoom, short x, short y)
+        public async Task<Shared.Entities.Dimension> GetDimension(short zoom, short x, short y, bool autoAdd = true)
         {
-            return await _dbContext.Dimensions.FirstOrDefaultAsync(d => d.Zoom == zoom && d.X == x && d.Y == y);
+            var dimension =
+                await _dbContext.Dimensions.FirstOrDefaultAsync(d => d.Zoom == zoom && d.X == x && d.Y == y);
+            if (dimension == null && autoAdd)
+            {
+                dimension = new Shared.Entities.Dimension()
+                {
+                    Zoom = zoom,
+                    X = x,
+                    Y = y,
+                    IsActive = false
+                };
+                _dbContext.Dimensions.Add(dimension);
+                await _dbContext.SaveChangesAsync();
+            }
+            return dimension;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace RH.EntityFramework.Repositories.Forecast.GFS
         Task<WindyTime> GetTime(long start, short step);
 
         Task<WindyTime> GetLastExistTime(int dimensionId);
+        Task<List<WindyTime>> GetExistTime(int dimensionId,long prevDay,long nextDay);
         Task<List<Gfs>> GetContentByDimensionAndTime(int dimensionId, int timeId);
     }
 }

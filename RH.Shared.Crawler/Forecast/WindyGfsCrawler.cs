@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -69,13 +70,43 @@ namespace RH.Shared.Crawler.Forecast
         {
             var time = await _gfsRepository.GetLastExistTime(dimension.Id);
             if (time == null)
+            {
+                await CrawlDimensionContentAsync(dimension);
+                //var result= await GetDimensionContentAsync(dimension);
+            }
+            time = await _gfsRepository.GetLastExistTime(dimension.Id);
+            if (time==null)
+            {
                 return string.Empty;
+            }
             var records = await _gfsRepository.GetContentByDimensionAndTime(dimension.Id, time.Id);
             if (records.Count == 0)
             {
                 return string.Empty;
             }
             var returnValue = SerializeGfsContent(records, time);
+            return returnValue;
+        }
+
+        public async Task<string> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.Dimension dimension, long epocTime)
+        {
+            var prevDay = epocTime - 86400000;
+            var nextDay = epocTime + 86400000;
+            var time = await _gfsRepository.GetExistTime(dimension.Id, prevDay, nextDay);
+
+            if (time.Count==0 )
+            {
+                return string.Empty;
+            }
+
+            var nearestTimeDiff = time.Min(x => Math.Abs(x.Start - epocTime));
+            var nearestTime = time.FirstOrDefault(x => Math.Abs(x.Start - epocTime) == nearestTimeDiff);
+            var records = await _gfsRepository.GetContentByDimensionAndTime(dimension.Id, nearestTime.Id);
+            if (records.Count == 0)
+            {
+                return string.Empty;
+            }
+            var returnValue = SerializeGfsContent(records, nearestTime);
             return returnValue;
         }
 
@@ -127,5 +158,7 @@ namespace RH.Shared.Crawler.Forecast
 
             return JsonConvert.SerializeObject(returnValue);
         }
+
+       
     }
 }

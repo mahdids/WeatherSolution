@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RH.EntityFramework.Shared\RH.EntityFramework.Shared.csproj" />
+    <ProjectReference Include="..\RH.Shared\RH.Shared.csproj" />
   </ItemGroup>
 
 </Project>

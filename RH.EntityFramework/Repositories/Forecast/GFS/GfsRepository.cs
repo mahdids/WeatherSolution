@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.EntityFramework.Shared.Entities;
+using RH.Shared.Extensions;
 
 namespace RH.EntityFramework.Repositories.Forecast.GFS
 {
@@ -61,10 +63,18 @@ namespace RH.EntityFramework.Repositories.Forecast.GFS
 
         public async Task<WindyTime> GetLastExistTime(int dimensionId)
         {
-            if (!_dbContext.Gfses.Where(x => x.DimensionId == dimensionId).Any())
+            if (!_dbContext.Gfses.Any(x => x.DimensionId == dimensionId))
                 return null;
             var maxTimeId = _dbContext.Gfses.Where(x => x.DimensionId == dimensionId).Max(x => x.WindyTimeId);
-            return await _dbContext.WindyTimes.FirstOrDefaultAsync(x => x.Id == maxTimeId);
+            var time=await _dbContext.WindyTimes.FirstOrDefaultAsync(x => x.Id == maxTimeId);
+           
+            return time;
+        }
+
+        public async Task<List<WindyTime>> GetExistTime(int dimensionId, long prevDay, long nextDay)
+        {
+            return await _dbContext.WindyTimes.Where(x => x.Start >= prevDay && x.Start <= nextDay && x.Type == "GFS")
+                .ToListAsync();
         }
 
         public async Task<List<Gfs>> GetContentByDimensionAndTime(int dimensionId, int timeId)

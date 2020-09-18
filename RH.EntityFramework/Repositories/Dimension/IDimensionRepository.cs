@@ -17,6 +17,6 @@ namespace RH.EntityFramework.Repositories.Dimension
 
         Task<bool> DeactivateDimensionAsync(int dimensionId);
 
-        Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y);
+        Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y, bool autoAdd = true);
     }
 }

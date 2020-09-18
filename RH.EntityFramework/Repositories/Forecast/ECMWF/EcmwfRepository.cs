@@ -61,10 +61,16 @@ namespace RH.EntityFramework.Repositories.Forecast.ECMWF
 
         public async Task<WindyTime> GetLastExistTime(int dimensionId)
         {
-            if (!_dbContext.Ecmwfs.Where(x => x.DimensionId == dimensionId).Any())
+            if (!_dbContext.Ecmwfs.Any(x => x.DimensionId == dimensionId))
                 return null;
             var maxTimeId = _dbContext.Ecmwfs.Where(x => x.DimensionId == dimensionId).Max(x => x.WindyTimeId);
             return await _dbContext.WindyTimes.FirstOrDefaultAsync(x => x.Id == maxTimeId);
+        }
+
+        public async Task<List<WindyTime>> GetExistTime(int dimensionId, long prevDay, long nextDay)
+        {
+            return await _dbContext.WindyTimes.Where(x => x.Start >= prevDay && x.Start <= nextDay && x.Type == "ECMWF")
+                .ToListAsync();
         }
 
         public async Task<List<Ecmwf>> GetContentByDimensionAndTime(int dimensionId, int timeId)

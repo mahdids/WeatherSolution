@@ -70,6 +70,11 @@ namespace RH.Shared.Crawler.Label
         {
             var returnValue = "[";
             var labels =await _labelRepository.GetLabelsByDimensionId(dimension.Id);
+            if (labels.Count==0)
+            {
+                await CrawlDimensionContentAsync(dimension);
+                labels = await _labelRepository.GetLabelsByDimensionId(dimension.Id);
+            }
             foreach (var label in labels)
             {
                 if (returnValue!="[")

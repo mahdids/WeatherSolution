@@ -67,9 +67,9 @@ namespace RH.Shared.Crawler.Dimension
         }
 
 
-        public async Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y)
+        public async Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y, bool autoAdd = true)
         {
-            return await _dimensionRepository.GetDimension(zoom, x, y);
+            return await _dimensionRepository.GetDimension(zoom, x, y,autoAdd);
         }
 
         public void ReloadDimensions()
