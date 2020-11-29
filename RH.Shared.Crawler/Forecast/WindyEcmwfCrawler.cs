@@ -44,6 +44,12 @@ namespace RH.Shared.Crawler.Forecast
                     _logger.LogInformation($"Crawl ECMWF Record  (No Content): {_webBaseAddress}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
+
+                if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.LogInformation($"Crawl ECMWF Record  (Forbidden): {_webBaseAddress}/{webPath}");
+                    return new CrawlResult() { Succeeded = true };
+                }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
                 var records = await DeserializeEcmwfContent(dimension.Id, contentString);
                 foreach (var record in records)
