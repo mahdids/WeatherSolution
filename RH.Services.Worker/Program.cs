@@ -52,7 +52,9 @@ namespace RH.Services.Worker
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            string connectionString = Configuration.GetConnectionString("WindyConnectionString");
+            var databaseType = Configuration["DataBaseType"];
+            var connectionString = "";
+
             var builder = Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
                 .UseSerilog()
@@ -63,8 +65,20 @@ namespace RH.Services.Worker
                     services.AddHostedService<EcmwfWorker>();
 
 
+                    switch (databaseType)
+                    {
+                        case "SqlServer":
+                            connectionString = Configuration
+                                .GetConnectionString("WindyConnectionString");
+                            services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString));
 
-                    services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString));
+                            break;
+                        case "MySql":
+                            connectionString = Configuration
+                                .GetConnectionString("MySqlConnectionString");
+                            services.AddDbContext<WeatherDbContext>(options => options.UseMySQL(connectionString));
+                            break;
+                    }
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
                     services.AddTransient<IDimensionRepository, DimensionRepository>();

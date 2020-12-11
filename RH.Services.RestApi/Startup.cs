@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
@@ -36,22 +35,22 @@ namespace RH.Services.RestApi
         {
             services.AddControllers();
 
-            string connectionString = Configuration.GetConnectionString("WindyConnectionString");
-            services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString));
+            var databaseType = Configuration["DataBaseType"];
+            var connectionString = "";
+            switch (databaseType)
+            {
+                case "SqlServer":
+                    connectionString = Configuration
+                        .GetConnectionString("WindyConnectionString");
+                    services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString));
 
-            //services.AddDbContextPool<WeatherDbContext>(
-            //    dbContextOptions => dbContextOptions
-            //        .UseMySql(
-            //            // Replace with your connection string.
-            //            "server=localhost;user=root;password=123ewqasdcxz;database=WeatherTest1",
-            //            // Replace with your server version and type.
-            //            // For common usages, see pull request #1233.
-            //            mySqlOptions => mySqlOptions
-            //                .CharSetBehavior(CharSetBehavior.NeverAppend))
-            //        // Everything from this point on is optional but helps with debugging.
-            //        .EnableSensitiveDataLogging()
-            //        .EnableDetailedErrors()
-            //);
+                    break;
+                case "MySql":
+                    connectionString = Configuration
+                        .GetConnectionString("MySqlConnectionString");
+                    services.AddDbContext<WeatherDbContext>(options => options.UseMySQL(connectionString));
+                    break;
+            }
             services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
             services.AddTransient<IDimensionRepository, DimensionRepository>();

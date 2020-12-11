@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RH.EntityFramework.Shared.DbContexts;
@@ -10,23 +9,21 @@ using RH.EntityFramework.Shared.DbContexts;
 namespace RH.EntityFramework.Shared.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20200829102736_AddForecastType")]
-    partial class AddForecastType
+    [Migration("20201211113833_InitialMySql")]
+    partial class InitialMySql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("RH.EntityFramework.Shared.Entities.Dimension", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -49,33 +46,34 @@ namespace RH.EntityFramework.Shared.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("Start")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime");
 
-                    b.Property<short>("Step")
-                        .HasColumnType("smallint");
+                    b.Property<int>("WindyTimeId")
+                        .HasColumnType("int");
 
                     b.Property<double>("X")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<double>("Y")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DimensionId");
+
+                    b.HasIndex("WindyTimeId");
 
                     b.ToTable("Ecmwfs");
                 });
@@ -84,17 +82,16 @@ namespace RH.EntityFramework.Shared.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
 
                     b.Property<string>("ECMWFContent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("GFSContent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<long>("Start")
                         .HasColumnType("bigint");
@@ -113,33 +110,34 @@ namespace RH.EntityFramework.Shared.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("Start")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime");
 
-                    b.Property<short>("Step")
-                        .HasColumnType("smallint");
+                    b.Property<int>("WindyTimeId")
+                        .HasColumnType("int");
 
                     b.Property<double>("X")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<double>("Y")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DimensionId");
+
+                    b.HasIndex("WindyTimeId");
 
                     b.ToTable("Gfses");
                 });
@@ -148,8 +146,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
@@ -161,25 +158,25 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FullText")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("O")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double>("X")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<double>("Y")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
@@ -188,11 +185,37 @@ namespace RH.EntityFramework.Shared.Migrations
                     b.ToTable("Labels");
                 });
 
+            modelBuilder.Entity("RH.EntityFramework.Shared.Entities.WindyTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<long>("Start")
+                        .HasColumnType("bigint");
+
+                    b.Property<short>("Step")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WindyTimes");
+                });
+
             modelBuilder.Entity("RH.EntityFramework.Shared.Entities.Ecmwf", b =>
                 {
                     b.HasOne("RH.EntityFramework.Shared.Entities.Dimension", "Dimension")
                         .WithMany()
                         .HasForeignKey("DimensionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RH.EntityFramework.Shared.Entities.WindyTime", "WindyTime")
+                        .WithMany()
+                        .HasForeignKey("WindyTimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -211,6 +234,12 @@ namespace RH.EntityFramework.Shared.Migrations
                     b.HasOne("RH.EntityFramework.Shared.Entities.Dimension", "Dimension")
                         .WithMany()
                         .HasForeignKey("DimensionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RH.EntityFramework.Shared.Entities.WindyTime", "WindyTime")
+                        .WithMany()
+                        .HasForeignKey("WindyTimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

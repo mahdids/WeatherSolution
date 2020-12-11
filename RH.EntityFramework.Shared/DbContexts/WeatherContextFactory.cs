@@ -14,13 +14,23 @@ namespace RH.EntityFramework.Shared.DbContexts
                 .AddJsonFile("AppSettings.json")
                 .Build();
 
+            var databaseType = configuration["DataBaseType"];
             var dbContextBuilder = new DbContextOptionsBuilder();
+            var connectionString = "";
+            switch (databaseType)
+            {
+                case "SqlServer":
+                    connectionString = configuration
+                        .GetConnectionString("WindyConnectionString");
+                    dbContextBuilder.UseSqlServer(connectionString);
+                    break;
+                case "MySql":
+                    connectionString = configuration
+                        .GetConnectionString("MySqlConnectionString");
+                    dbContextBuilder.UseMySQL(connectionString);
 
-            var connectionString = configuration
-                .GetConnectionString("WindyConnectionString");
-
-            dbContextBuilder.UseSqlServer(connectionString);
-
+                    break;
+            }
             return new WeatherDbContext(dbContextBuilder.Options);
         }
     }
