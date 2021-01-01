@@ -11,18 +11,18 @@ using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 using RH.Shared.HttpClient;
 
-namespace RH.Shared.Crawler.Forecast
+namespace RH.Shared.Crawler.Forecast.CityTile
 {
-    public class WindyGfsCrawler : IForecastCrawler
+    public class GfsCityTileCrawler : IForecastCrawler
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IGfsRepository _gfsRepository;
         private readonly string _webBaseAddress;
-        private readonly ILogger<WindyGfsCrawler> _logger;
+        private readonly ILogger<GfsCityTileCrawler> _logger;
         private WindyTime _maxTime=new WindyTime();
         private WindyTime _lastTime = new WindyTime();
 
-        public WindyGfsCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<WindyGfsCrawler> logger, IGfsRepository gfsRepository)
+        public GfsCityTileCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<GfsCityTileCrawler> logger, IGfsRepository gfsRepository)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;

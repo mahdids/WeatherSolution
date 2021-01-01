@@ -17,6 +17,7 @@ namespace RH.EntityFramework.Shared.DbContexts
 
         public WeatherDbContext(DbContextOptions options) : base(options)
         {
+            
         }
     }
 }

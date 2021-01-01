@@ -11,6 +11,7 @@ using RH.EntityFramework.Shared.DbContexts;
 using RH.Services.Worker.Workers;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
+using RH.Shared.Crawler.Forecast.CityTile;
 using RH.Shared.Crawler.Label;
 using RH.Shared.Crawler.Tile;
 using RH.Shared.HttpClient;
@@ -37,7 +38,16 @@ namespace RH.Services.Worker
                 Log.Information("====================================================================");
                 Log.Information($"Application Starts. Version: {System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version}");
                 Log.Information($"Application Directory: {AppDomain.CurrentDomain.BaseDirectory}");
-                CreateHostBuilder(args).Build().Run();
+                var build = CreateHostBuilder(args).Build();
+                using (var serviceScope = build.Services.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<WeatherDbContext>();
+                    //context.Database.EnsureCreated();
+                    context.Database.Migrate();
+                }
+                build.Run();
+                
+
             }
             catch (Exception e)
             {
@@ -76,7 +86,7 @@ namespace RH.Services.Worker
                         case "MySql":
                             connectionString = Configuration
                                 .GetConnectionString("MySqlConnectionString");
-                            services.AddDbContext<WeatherDbContext>(options => options.UseMySQL(connectionString));
+                            services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString));
                             break;
                     }
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
@@ -89,8 +99,8 @@ namespace RH.Services.Worker
                     services.AddTransient<IDimensionManager, DimensionManager>();
                     services.AddTransient<ITileCrawler, WindyTileCrawler>();
                     services.AddTransient<ILabelCrawler, WindyLabelCrawler>();
-                    services.AddTransient<WindyGfsCrawler, WindyGfsCrawler>();
-                    services.AddTransient<WindyEcmwfCrawler, WindyEcmwfCrawler>();
+                    services.AddTransient<GfsCityTileCrawler, GfsCityTileCrawler>();
+                    services.AddTransient<EcmwfCityTileCrawler, EcmwfCityTileCrawler>();
                 });
 
             return builder;

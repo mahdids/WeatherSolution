@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
+using RH.Shared.Crawler.Forecast.CityTile;
 using RH.Shared.Crawler.Label;
 using RH.Shared.Crawler.Tile;
 using RH.Shared.Extensions;
@@ -32,7 +33,7 @@ namespace RH.Services.Worker.Workers
             {
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IDimensionManager>();
                 
-                var esmwfCrawler = scope.ServiceProvider.GetRequiredService<WindyEcmwfCrawler>();
+                var esmwfCrawler = scope.ServiceProvider.GetRequiredService<EcmwfCityTileCrawler>();
 
                 
                 long currentWindyTime = 0;

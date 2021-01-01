@@ -38,8 +38,6 @@ namespace RH.Services.Worker
 
         }
 
-
-
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Worker Starting");

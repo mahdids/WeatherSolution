@@ -8,20 +8,21 @@ using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
+using RH.Shared.Crawler.Forecast.CityTile;
 
 namespace RH.Services.RestApi.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ForecastController : ControllerBase
+    public class CityTileController : ControllerBase
     {
         private readonly IDimensionManager _dimensionManager;
         private readonly ILogger<TilesController> _logger;
 
-        private readonly WindyEcmwfCrawler _ecmwfCrawler;
-        private readonly WindyGfsCrawler _gfsCrawler;
+        private readonly EcmwfCityTileCrawler _ecmwfCrawler;
+        private readonly GfsCityTileCrawler _gfsCrawler;
 
-        public ForecastController(IDimensionManager dimensionManager, ILogger<TilesController> logger, WindyEcmwfCrawler ecmwfCrawler, WindyGfsCrawler gfsCrawler)
+        public CityTileController(IDimensionManager dimensionManager, ILogger<TilesController> logger, EcmwfCityTileCrawler ecmwfCrawler, GfsCityTileCrawler gfsCrawler)
         {
             _dimensionManager = dimensionManager;
             _logger = logger;

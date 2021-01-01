@@ -13,6 +13,7 @@ using RH.EntityFramework.Repositories.Label;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
+using RH.Shared.Crawler.Forecast.CityTile;
 using RH.Shared.Crawler.Label;
 using RH.Shared.Crawler.Tile;
 using RH.Shared.HttpClient;
@@ -48,7 +49,7 @@ namespace RH.Services.RestApi
                 case "MySql":
                     connectionString = Configuration
                         .GetConnectionString("MySqlConnectionString");
-                    services.AddDbContext<WeatherDbContext>(options => options.UseMySQL(connectionString));
+                    services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString));
                     break;
             }
             services.AddTransient<IHttpClientFactory, HttpClientFactory>();
@@ -61,8 +62,8 @@ namespace RH.Services.RestApi
             services.AddTransient<IDimensionManager, DimensionManager>();
             services.AddTransient<ITileCrawler, WindyTileCrawler>();
             services.AddTransient<ILabelCrawler, WindyLabelCrawler>();
-            services.AddTransient<WindyGfsCrawler, WindyGfsCrawler>();
-            services.AddTransient<WindyEcmwfCrawler, WindyEcmwfCrawler>();
+            services.AddTransient<GfsCityTileCrawler, GfsCityTileCrawler>();
+            services.AddTransient<EcmwfCityTileCrawler, EcmwfCityTileCrawler>();
 
             services.AddSwaggerGen();
 

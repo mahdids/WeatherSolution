@@ -9,8 +9,8 @@ using RH.EntityFramework.Shared.DbContexts;
 namespace RH.EntityFramework.Shared.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20201211113833_InitialMySql")]
-    partial class InitialMySql
+    [Migration("20210101102022_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,7 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<short>("X")
                         .HasColumnType("smallint");
@@ -49,16 +49,16 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("WindyTimeId")
                         .HasColumnType("int");
@@ -88,10 +88,10 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ECMWFContent")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("GFSContent")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<long>("Start")
                         .HasColumnType("bigint");
@@ -113,16 +113,16 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("WindyTimeId")
                         .HasColumnType("int");
@@ -158,19 +158,19 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FullText")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("O")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<double>("X")
                         .HasColumnType("double");
@@ -198,7 +198,7 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<string>("Type")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 

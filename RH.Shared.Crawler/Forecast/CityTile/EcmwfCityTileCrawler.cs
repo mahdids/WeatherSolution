@@ -11,17 +11,17 @@ using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 using RH.Shared.HttpClient;
 
-namespace RH.Shared.Crawler.Forecast
+namespace RH.Shared.Crawler.Forecast.CityTile
 {
-    public class WindyEcmwfCrawler:IForecastCrawler
+    public class EcmwfCityTileCrawler:IForecastCrawler
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEcmwfRepository _ecmwfRepository;
         private readonly string _webBaseAddress;
-        private readonly ILogger<WindyEcmwfCrawler> _logger;
+        private readonly ILogger<EcmwfCityTileCrawler> _logger;
         private WindyTime _maxTime = new WindyTime();
         private WindyTime _lastTime = new WindyTime();
-        public WindyEcmwfCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<WindyEcmwfCrawler> logger, IEcmwfRepository ecmwfRepository)
+        public EcmwfCityTileCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<EcmwfCityTileCrawler> logger, IEcmwfRepository ecmwfRepository)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;

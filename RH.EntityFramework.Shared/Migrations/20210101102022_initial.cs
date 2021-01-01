@@ -1,10 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.Data.EntityFrameworkCore.Metadata;
 
 namespace RH.EntityFramework.Shared.Migrations
 {
-    public partial class InitialMySql : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Zoom = table.Column<short>(nullable: false),
                     X = table.Column<short>(nullable: false),
                     Y = table.Column<short>(nullable: false),
@@ -29,7 +29,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Type = table.Column<string>(nullable: true),
                     Start = table.Column<long>(nullable: false),
                     Step = table.Column<short>(nullable: false)
@@ -44,7 +44,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Start = table.Column<long>(nullable: false),
                     Step = table.Column<short>(nullable: false),
                     GFSContent = table.Column<string>(nullable: true),
@@ -67,7 +67,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     O = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
@@ -95,7 +95,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Location = table.Column<string>(nullable: true),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
@@ -126,7 +126,7 @@ namespace RH.EntityFramework.Shared.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Location = table.Column<string>(nullable: true),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
