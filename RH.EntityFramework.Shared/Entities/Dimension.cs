@@ -7,7 +7,6 @@ namespace RH.EntityFramework.Shared.Entities
         public Dimension()
         {
             this.Labels = new HashSet<Label>();
-            this.Forecasts = new HashSet<Forecast>();
         }
 
         public int Id { get; set; }
@@ -17,6 +16,5 @@ namespace RH.EntityFramework.Shared.Entities
         public bool IsActive { get; set; }
 
         public virtual ICollection<Label> Labels { get; set; }
-        public virtual ICollection<Forecast> Forecasts { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Label;
 using RH.Shared.Crawler.Tile;
+using RH.Shared.Crawler.WindDimension;
 
 namespace RH.Services.Worker
 {
@@ -27,16 +28,21 @@ namespace RH.Services.Worker
             _logger.LogInformation("Worker ExecuteAsync");
             using var scope = _services.CreateScope();
             var dimensionManager = scope.ServiceProvider.GetRequiredService<IDimensionManager>();
+            var windDimensionManager = scope.ServiceProvider.GetRequiredService<IWindDimensionManager>();
             var tileCrawler = scope.ServiceProvider.GetRequiredService<ITileCrawler>();
             var labelCrawler = scope.ServiceProvider.GetRequiredService<ILabelCrawler>();
             if (_configuration["Worker:RegenerateDimension"] == "1")
                 await RegenerateAllDimensionAsync(dimensionManager);
+            if (_configuration["Worker:RegenerateWindDimension"] == "1")
+                await RegenerateAllWindDimensionAsync(windDimensionManager);
             if (_configuration["Worker:CrawlLabel"] == "1")
                 await CrawlLabelAsync(dimensionManager, labelCrawler);
             if (_configuration["Worker:CrawlTile"] == "1")
                 await CrawlTileAsync(dimensionManager, tileCrawler);
 
         }
+
+        
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
@@ -67,7 +73,16 @@ namespace RH.Services.Worker
                 short.Parse(_configuration["Dimensions:BottomRight:X"]),
                 short.Parse(_configuration["Dimensions:BottomRight:Y"]));
         }
-
+        private async Task RegenerateAllWindDimensionAsync(IWindDimensionManager windDimensionManager)
+        {
+            var result = await windDimensionManager.RegenerateAllDimension(
+                double.Parse(_configuration["WindDimensions:Interval:X"]),
+                double.Parse(_configuration["WindDimensions:Interval:Y"]),
+                double.Parse(_configuration["WindDimensions:TopLeft:X"]),
+                double.Parse(_configuration["WindDimensions:TopLeft:Y"]),
+                double.Parse(_configuration["WindDimensions:BottomRight:X"]),
+                double.Parse(_configuration["WindDimensions:BottomRight:Y"]));
+        }
         private async Task CrawlTileAsync(IDimensionManager dimensionManager, ITileCrawler tileCrawler)
         {
             foreach (var dimension in dimensionManager.Dimensions)

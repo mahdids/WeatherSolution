@@ -1,28 +1,27 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Shared.Entities;
-using RH.Shared.Crawler.Dimension;
-using RH.Shared.Crawler.Forecast;
-using RH.Shared.Crawler.Forecast.CityTile;
+using RH.Shared.Crawler.Forecast.Wind;
+using RH.Shared.Crawler.WindDimension;
 
 namespace RH.Services.RestApi.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityTileController : ControllerBase
+    public class ForecastController : ControllerBase
     {
-        private readonly IDimensionManager _dimensionManager;
-        private readonly ILogger<CityTileController> _logger;
+        private readonly IWindDimensionManager _dimensionManager;
+        private readonly ILogger<ForecastController> _logger;
 
-        private readonly EcmwfCityTileCrawler _ecmwfCrawler;
-        private readonly GfsCityTileCrawler _gfsCrawler;
+        private readonly EcmwfWindCrawler _ecmwfCrawler;
+        private readonly GfsWindCrawler _gfsCrawler;
 
-        public CityTileController(IDimensionManager dimensionManager, ILogger<CityTileController> logger, EcmwfCityTileCrawler ecmwfCrawler, GfsCityTileCrawler gfsCrawler)
+        public ForecastController(IWindDimensionManager dimensionManager, ILogger<ForecastController> logger, EcmwfWindCrawler ecmwfCrawler, GfsWindCrawler gfsCrawler)
         {
             _dimensionManager = dimensionManager;
             _logger = logger;
@@ -30,14 +29,14 @@ namespace RH.Services.RestApi.Controller
             _gfsCrawler = gfsCrawler;
         }
 
-        [HttpGet("gfs/{zoom}/{x}/{y}")]
-        public async Task<IActionResult> GetGfs(short zoom, short x, short y,long epocTime)
+        [HttpGet("gfs/{x}/{y}")]
+        public async Task<IActionResult> GetGfs(short x, short y, long epocTime)
         {
-            Dimension dimension;
+            WindDimension dimension;
             string result;
             if (epocTime == 0)
             {
-                dimension = await _dimensionManager.GetDimension(zoom, x, y);
+                dimension = await _dimensionManager.GetDimension( x, y);
                 if (dimension == null)
                     return NotFound();
                 result = await _gfsCrawler.GetDimensionContentAsync(dimension);
@@ -45,24 +44,24 @@ namespace RH.Services.RestApi.Controller
                     return NoContent();
                 return Ok(result);
             }
-            dimension = await _dimensionManager.GetDimension(zoom, x, y,false);
+            dimension = await _dimensionManager.GetDimension(x, y, false);
             if (dimension == null)
                 return NotFound();
-            result = await _gfsCrawler.GetDimensionContentByTimeAsync(dimension,epocTime);
+            result = await _gfsCrawler.GetDimensionContentByTimeAsync(dimension, epocTime);
             if (string.IsNullOrEmpty(result))
                 return NoContent();
             return Ok(result);
 
         }
 
-        [HttpGet("ecmwf/{zoom}/{x}/{y}")]
-        public async Task<IActionResult> GetEcmwf(short zoom, short x, short y, long epocTime)
+        [HttpGet("ecmwf/{x}/{y}")]
+        public async Task<IActionResult> GetEcmwf(short x, short y, long epocTime)
         {
-            Dimension dimension;
+            WindDimension dimension;
             string result;
             if (epocTime == 0)
             {
-                dimension = await _dimensionManager.GetDimension(zoom, x, y);
+                dimension = await _dimensionManager.GetDimension(x, y);
                 if (dimension == null)
                     return NotFound();
                 result = await _ecmwfCrawler.GetDimensionContentAsync(dimension);
@@ -70,13 +69,14 @@ namespace RH.Services.RestApi.Controller
                     return NoContent();
                 return Ok(result);
             }
-            dimension = await _dimensionManager.GetDimension(zoom, x, y, false);
+            dimension = await _dimensionManager.GetDimension(x, y, false);
             if (dimension == null)
                 return NotFound();
             result = await _ecmwfCrawler.GetDimensionContentByTimeAsync(dimension, epocTime);
             if (string.IsNullOrEmpty(result))
                 return NoContent();
             return Ok(result);
+
         }
     }
 }

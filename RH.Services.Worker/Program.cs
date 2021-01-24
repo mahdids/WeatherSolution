@@ -7,13 +7,16 @@ using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
 using RH.EntityFramework.Repositories.Label;
+using RH.EntityFramework.Repositories.Wind;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.Services.Worker.Workers;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
 using RH.Shared.Crawler.Forecast.CityTile;
+using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.Label;
 using RH.Shared.Crawler.Tile;
+using RH.Shared.Crawler.WindDimension;
 using RH.Shared.HttpClient;
 using Serilog;
 
@@ -74,6 +77,9 @@ namespace RH.Services.Worker
                     services.AddHostedService<GfsWorker>();
                     services.AddHostedService<EcmwfWorker>();
 
+                    services.AddHostedService<GfsWindWorker>();
+                    services.AddHostedService<EcmwfWindWorker>();
+
 
                     switch (databaseType)
                     {
@@ -92,15 +98,21 @@ namespace RH.Services.Worker
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
                     services.AddTransient<IDimensionRepository, DimensionRepository>();
+                    services.AddTransient<IWindDimensionRepository, WindDimensionRepository>();
                     services.AddTransient<ILabelRepository, LabelRepository>();
                     services.AddTransient<IGfsRepository, GfsRepository>();
+                    services.AddTransient<GfsWindRepository, GfsWindRepository>();
                     services.AddTransient<IEcmwfRepository, EcmwfRepository>();
+                    services.AddTransient<EcmwfWindRepository, EcmwfWindRepository>();
 
                     services.AddTransient<IDimensionManager, DimensionManager>();
+                    services.AddTransient<IWindDimensionManager, WindDimensionManager>();
                     services.AddTransient<ITileCrawler, WindyTileCrawler>();
                     services.AddTransient<ILabelCrawler, WindyLabelCrawler>();
                     services.AddTransient<GfsCityTileCrawler, GfsCityTileCrawler>();
                     services.AddTransient<EcmwfCityTileCrawler, EcmwfCityTileCrawler>();
+                    services.AddTransient<GfsWindCrawler, GfsWindCrawler>();
+                    services.AddTransient<EcmwfWindCrawler, EcmwfWindCrawler>();
                 });
 
             return builder;

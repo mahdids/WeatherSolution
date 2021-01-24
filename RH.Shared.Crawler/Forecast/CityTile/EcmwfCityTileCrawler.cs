@@ -26,7 +26,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _ecmwfRepository = ecmwfRepository;
-            _webBaseAddress = configuration["Forecast:Windy:ECMWF"];
+            _webBaseAddress = configuration["Forecast:CityTile:ECMWF"];
         }
         public WindyTime MaxTime
         {

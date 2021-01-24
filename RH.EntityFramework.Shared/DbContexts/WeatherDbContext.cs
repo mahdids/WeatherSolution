@@ -7,8 +7,10 @@ namespace RH.EntityFramework.Shared.DbContexts
     {
 
         public DbSet<Dimension> Dimensions { get; set; }
+        public DbSet<WindDimension> WindDimensions { get; set; }
+        public DbSet<GfsForecast> GfsForecasts { get; set; }
+        public DbSet<EcmwfForecast> EcmwfForecasts { get; set; }
         public DbSet<Label> Labels { get; set; }
-        public DbSet<Forecast> Forecasts { get; set; }
         public DbSet<Gfs> Gfses{ get; set; }
         public DbSet<Ecmwf> Ecmwfs{ get; set; }
         public DbSet<WindyTime> WindyTimes { get; set; }

@@ -27,7 +27,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _gfsRepository = gfsRepository;
-            _webBaseAddress = configuration["Forecast:Windy:GFS"];
+            _webBaseAddress = configuration["Forecast:CityTile:GFS"];
         }
 
         public WindyTime MaxTime
