@@ -64,8 +64,7 @@ namespace RH.Services.Worker
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            var databaseType = Configuration["DataBaseType"];
+        { var databaseType = Configuration["DataBaseType"];
             var connectionString = "";
 
             var builder = Host.CreateDefaultBuilder(args)

@@ -15,6 +15,8 @@ namespace RH.EntityFramework.Shared.DbContexts
         public DbSet<Ecmwf> Ecmwfs{ get; set; }
         public DbSet<WindyTime> WindyTimes { get; set; }
 
+        public DbSet<SystemSettings> SystemSettings { get; set; }
+
 
 
         public WeatherDbContext(DbContextOptions options) : base(options)
