@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RH.EntityFramework.Repositories.Label;
+using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 using RH.Shared.HttpClient;
 
@@ -14,7 +15,7 @@ namespace RH.Shared.Crawler.Label
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILabelRepository _labelRepository;
-        private readonly string _webBaseAddress;
+        //private readonly string _webBaseAddress;
         private readonly ILogger<WindyLabelCrawler> _logger;
 
         public WindyLabelCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<WindyLabelCrawler> logger, ILabelRepository labelRepository)
@@ -22,15 +23,16 @@ namespace RH.Shared.Crawler.Label
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _labelRepository = labelRepository;
-            _webBaseAddress = configuration["LabelPath:Windy"];
+            //_webBaseAddress = configuration["LabelPath:Windy"];
         }
 
-        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var webPath = $"{dimension.Zoom}/{dimension.X}/{dimension.Y}.json";
             try
             {
-                var client = _httpClientFactory.GetHttpClient(_webBaseAddress);
+                var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.LabelPath);
                 var item = await client.GetAsync(webPath);
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
                 var cityRecords = JsonConvert.DeserializeObject<List<List<object>>>(contentString);
@@ -61,18 +63,19 @@ namespace RH.Shared.Crawler.Label
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Crawl Label Exception : {_webBaseAddress}/{webPath}");
+                _logger.LogError(e, $"Crawl Label Exception : {currentSetting.CrawlWebPath.LabelPath}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
         }
 
-        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var returnValue = "[";
             var labels =await _labelRepository.GetLabelsByDimensionId(dimension.Id);
             if (labels.Count==0)
             {
-                await CrawlDimensionContentAsync(dimension);
+                await CrawlDimensionContentAsync(dimension,currentSetting);
                 labels = await _labelRepository.GetLabelsByDimensionId(dimension.Id);
             }
             foreach (var label in labels)

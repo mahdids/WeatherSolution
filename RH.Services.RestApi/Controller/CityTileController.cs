@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RH.EntityFramework.Repositories.Settings;
 using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast;
@@ -18,16 +19,17 @@ namespace RH.Services.RestApi.Controller
     {
         private readonly IDimensionManager _dimensionManager;
         private readonly ILogger<CityTileController> _logger;
-
+        private readonly ISystemSettingRepository _systemSettingRepository;
         private readonly EcmwfCityTileCrawler _ecmwfCrawler;
         private readonly GfsCityTileCrawler _gfsCrawler;
 
-        public CityTileController(IDimensionManager dimensionManager, ILogger<CityTileController> logger, EcmwfCityTileCrawler ecmwfCrawler, GfsCityTileCrawler gfsCrawler)
+        public CityTileController(IDimensionManager dimensionManager, ILogger<CityTileController> logger, EcmwfCityTileCrawler ecmwfCrawler, GfsCityTileCrawler gfsCrawler, ISystemSettingRepository systemSettingRepository)
         {
             _dimensionManager = dimensionManager;
             _logger = logger;
             _ecmwfCrawler = ecmwfCrawler;
             _gfsCrawler = gfsCrawler;
+            _systemSettingRepository = systemSettingRepository;
         }
 
         [HttpGet("gfs/{zoom}/{x}/{y}")]
@@ -40,7 +42,7 @@ namespace RH.Services.RestApi.Controller
                 dimension = await _dimensionManager.GetDimension(zoom, x, y);
                 if (dimension == null)
                     return NotFound();
-                result = await _gfsCrawler.GetDimensionContentAsync(dimension);
+                result = await _gfsCrawler.GetDimensionContentAsync(dimension, await _systemSettingRepository.GetCurrentSetting());
                 if (string.IsNullOrEmpty(result))
                     return NoContent();
                 return Ok(result);
@@ -65,7 +67,7 @@ namespace RH.Services.RestApi.Controller
                 dimension = await _dimensionManager.GetDimension(zoom, x, y);
                 if (dimension == null)
                     return NotFound();
-                result = await _ecmwfCrawler.GetDimensionContentAsync(dimension);
+                result = await _ecmwfCrawler.GetDimensionContentAsync(dimension,await _systemSettingRepository.GetCurrentSetting());
                 if (string.IsNullOrEmpty(result))
                     return NoContent();
                 return Ok(result);

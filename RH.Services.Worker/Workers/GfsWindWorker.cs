@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RH.Shared.Crawler.Dimension;
-using RH.Shared.Crawler.Forecast.CityTile;
+using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.WindDimension;
-using RH.Shared.Extensions;
 
 namespace RH.Services.Worker.Workers
 {
@@ -19,35 +14,42 @@ namespace RH.Services.Worker.Workers
     {
         private readonly ILogger<GfsWindWorker> _logger;
         private readonly IServiceProvider _services;
-        private readonly IConfiguration _configuration;
-        public GfsWindWorker(ILogger<GfsWindWorker> logger, IServiceProvider services, IConfiguration configuration)
+        public GfsWindWorker(ILogger<GfsWindWorker> logger, IServiceProvider services)
         {
             _logger = logger;
             _services = services;
-            _configuration = configuration;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             using (var scope = _services.CreateScope())
             {
+                var systemSetting = scope.ServiceProvider.GetRequiredService<ISystemSettingRepository>();
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IWindDimensionManager>();
                 var gfsCrawler = scope.ServiceProvider.GetRequiredService<GfsWindCrawler>();
 
                 long currentWindyTime = 0;
                 long nextWindyTime = 0;
                 int roundConter = 0;
+                var currentSetting = await systemSetting.GetCurrentSetting();
+                var activeId = currentSetting.Id;
+
                 while (!stoppingToken.IsCancellationRequested)
                 {
+
+                    Thread.Sleep(5000);
                     dimensionManager.ReloadDimensions();
                     _logger.LogInformation($"GfsWind Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
-
-                        await gfsCrawler.CrawlDimensionContentAsync(dimension);
+                        if (activeId != systemSetting.ActiveSettingId)
+                        {
+                            currentSetting = await systemSetting.GetCurrentSetting();
+                        }
+                        await gfsCrawler.CrawlDimensionContentAsync(dimension,currentSetting);
                     }
-                    
+
                     _logger.LogInformation($"End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");
-                    
+
                 }
             }
         }

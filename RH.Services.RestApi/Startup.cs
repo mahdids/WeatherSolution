@@ -10,6 +10,7 @@ using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
 using RH.EntityFramework.Repositories.Label;
+using RH.EntityFramework.Repositories.Settings;
 using RH.EntityFramework.Repositories.Wind;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.Shared.Crawler.Dimension;
@@ -52,11 +53,12 @@ namespace RH.Services.RestApi
                 case "MySql":
                     connectionString = Configuration
                         .GetConnectionString("MySqlConnectionString");
-                    services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString));
+                    services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
                     break;
             }
             services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
+            services.AddTransient<ISystemSettingRepository, SystemSettingRepository>();
             services.AddTransient<IDimensionRepository, DimensionRepository>();
             services.AddTransient<IWindDimensionRepository, WindDimensionRepository>();
             services.AddTransient<ILabelRepository, LabelRepository>();
@@ -76,7 +78,7 @@ namespace RH.Services.RestApi
 
 
             services.AddSwaggerGen();
-
+            services.AddMvc(option => option.EnableEndpointRouting = false);
 
         }
 
@@ -87,6 +89,8 @@ namespace RH.Services.RestApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMvcWithDefaultRoute();
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Repositories.Label;
+using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Label;
 
@@ -18,6 +19,7 @@ namespace RH.Services.RestApi.Controller
         
         private ILabelCrawler LabelCrawler { get; }
         private readonly IDimensionManager _dimensionManager;
+        private readonly ISystemSettingRepository _settingRepository;
 
         private readonly ILogger<LabelsController> _logger;
 
@@ -40,7 +42,7 @@ namespace RH.Services.RestApi.Controller
             var dimension = await _dimensionManager.GetDimension(zoom, x, y);
             if (dimension == null)
                 return Ok("[]");
-            var returnValue =await LabelCrawler.GetDimensionContentAsync(dimension);
+            var returnValue =await LabelCrawler.GetDimensionContentAsync(dimension,await _settingRepository.GetCurrentSetting());
             return Ok(returnValue);
         }
     }

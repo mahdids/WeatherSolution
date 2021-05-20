@@ -13,11 +13,11 @@ using RH.Shared.HttpClient;
 
 namespace RH.Shared.Crawler.Forecast.CityTile
 {
-    public class EcmwfCityTileCrawler:IForecastCrawler
+    public class EcmwfCityTileCrawler : IForecastCrawler
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEcmwfRepository _ecmwfRepository;
-        private readonly string _webBaseAddress;
+        //private readonly string _webBaseAddress;
         private readonly ILogger<EcmwfCityTileCrawler> _logger;
         private WindyTime _maxTime = new WindyTime();
         private WindyTime _lastTime = new WindyTime();
@@ -26,28 +26,29 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _ecmwfRepository = ecmwfRepository;
-            _webBaseAddress = configuration["Forecast:CityTile:ECMWF"];
+            //_webBaseAddress = configuration["Forecast:CityTile:ECMWF"];
         }
         public WindyTime MaxTime
         {
             get => _maxTime;
         }
-        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var webPath = $"{dimension.Zoom}/{dimension.X}/{dimension.Y}";
             try
             {
-                var client = _httpClientFactory.GetHttpClient(_webBaseAddress);
+                var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastCityTileECMWF);
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode == HttpStatusCode.NotFound || item.StatusCode == HttpStatusCode.NoContent)
                 {
-                    _logger.LogInformation($"Crawl ECMWF Record  (No Content): {_webBaseAddress}/{webPath}");
+                    _logger.LogInformation($"Crawl ECMWF Record  (No Content): {currentSetting.CrawlWebPath.ForecastCityTileECMWF}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
 
                 if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.LogInformation($"Crawl ECMWF Record  (Forbidden): {_webBaseAddress}/{webPath}");
+                    _logger.LogInformation($"Crawl ECMWF Record  (Forbidden): {currentSetting.CrawlWebPath.ForecastCityTileECMWF}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
@@ -56,22 +57,23 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                 {
                     await _ecmwfRepository.Add(record);
                 }
-                _logger.LogInformation($"Crawl ECMWF Record : {_webBaseAddress}/{webPath}");
+                _logger.LogInformation($"Crawl ECMWF Record : {currentSetting.CrawlWebPath.ForecastCityTileECMWF}/{webPath}");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Crawl ECMWF Exception : {_webBaseAddress}/{webPath}");
+                _logger.LogError(e, $"Crawl ECMWF Exception : {currentSetting.CrawlWebPath.ForecastCityTileECMWF}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
             return new CrawlResult() { Succeeded = true };
         }
 
-        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var time = await _ecmwfRepository.GetLastExistTime(dimension.Id);
             if (time == null)
             {
-                await CrawlDimensionContentAsync(dimension);
+                await CrawlDimensionContentAsync(dimension, currentSetting);
                 //var result= await GetDimensionContentAsync(dimension);
             }
             time = await _ecmwfRepository.GetLastExistTime(dimension.Id);
@@ -80,11 +82,11 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                 return string.Empty;
             }
             var records = await _ecmwfRepository.GetContentByDimensionAndTime(dimension.Id, time.Id);
-            if (records.Count==0)
+            if (records.Count == 0)
             {
                 return string.Empty;
             }
-            var returnValue = SerializeEcmwfContent(records,time);
+            var returnValue = SerializeEcmwfContent(records, time);
             return returnValue;
         }
         public async Task<string> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.Dimension dimension, long epocTime)
@@ -110,13 +112,11 @@ namespace RH.Shared.Crawler.Forecast.CityTile
         }
         private string SerializeEcmwfContent(List<Ecmwf> records, WindyTime time)
         {
-            var returnValue=new Dictionary<string,object>();
-            returnValue.Add("step", time.Step);
-            returnValue.Add("start",time.Start);
+            var returnValue = new Dictionary<string, object> { { "step", time.Step }, { "start", time.Start } };
             foreach (var record in records)
             {
                 var data = JsonConvert.DeserializeObject<List<int>>(record.DataString);
-                returnValue.Add(record.Location,data);    
+                returnValue.Add(record.Location, data);
             }
 
             return JsonConvert.SerializeObject(returnValue);

@@ -27,7 +27,7 @@ namespace RH.EntityFramework.Shared.DbContexts
                 case "MySql":
                     connectionString = configuration
                         .GetConnectionString("MySqlConnectionString");
-                    dbContextBuilder.UseMySql(connectionString);
+                    dbContextBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
                     break;
             }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RH.EntityFramework.Repositories.Forecast.GFS;
@@ -17,17 +16,17 @@ namespace RH.Shared.Crawler.Forecast.CityTile
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IGfsRepository _gfsRepository;
-        private readonly string _webBaseAddress;
+        //private readonly string _webBaseAddress;
         private readonly ILogger<GfsCityTileCrawler> _logger;
         private WindyTime _maxTime=new WindyTime();
         private WindyTime _lastTime = new WindyTime();
 
-        public GfsCityTileCrawler(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<GfsCityTileCrawler> logger, IGfsRepository gfsRepository)
+        public GfsCityTileCrawler(IHttpClientFactory httpClientFactory, ILogger<GfsCityTileCrawler> logger, IGfsRepository gfsRepository)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _gfsRepository = gfsRepository;
-            _webBaseAddress = configuration["Forecast:CityTile:GFS"];
+            //_webBaseAddress = configuration["Forecast:CityTile:GFS"];
         }
 
         public WindyTime MaxTime
@@ -35,16 +34,17 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             get => _maxTime;
         }
 
-        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var webPath = $"{dimension.Zoom}/{dimension.X}/{dimension.Y}";
             try
             {
-                var client = _httpClientFactory.GetHttpClient(_webBaseAddress);
+                var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastCityTileGFS);
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode==HttpStatusCode.NotFound||item.StatusCode==HttpStatusCode.NoContent)
                 {
-                    _logger.LogInformation($"Crawl GFS Record (No Content): {_webBaseAddress}/{webPath}");
+                    _logger.LogInformation($"Crawl GFS Record (No Content): {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
                     return new CrawlResult(){Succeeded = true};
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
@@ -56,22 +56,23 @@ namespace RH.Shared.Crawler.Forecast.CityTile
 
                 
                 
-                _logger.LogInformation($"Crawl GFS Record : {_webBaseAddress}/{webPath}");
+                _logger.LogInformation($"Crawl GFS Record : {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Crawl GFS Exception : {_webBaseAddress}/{webPath}");
+                _logger.LogError(e, $"Crawl GFS Exception : {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
             return new CrawlResult() { Succeeded = true };
         }
        
-        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
+            SystemSettings currentSetting)
         {
             var time = await _gfsRepository.GetLastExistTime(dimension.Id);
             if (time == null)
             {
-                await CrawlDimensionContentAsync(dimension);
+                await CrawlDimensionContentAsync(dimension, currentSetting);
                 //var result= await GetDimensionContentAsync(dimension);
             }
             time = await _gfsRepository.GetLastExistTime(dimension.Id);

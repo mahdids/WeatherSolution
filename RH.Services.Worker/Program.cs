@@ -7,6 +7,7 @@ using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
 using RH.EntityFramework.Repositories.Label;
+using RH.EntityFramework.Repositories.Settings;
 using RH.EntityFramework.Repositories.Wind;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.Services.Worker.Workers;
@@ -19,6 +20,8 @@ using RH.Shared.Crawler.Tile;
 using RH.Shared.Crawler.WindDimension;
 using RH.Shared.HttpClient;
 using Serilog;
+using Serilog.Events;
+using Serilog.Filters;
 
 namespace RH.Services.Worker
 {
@@ -32,9 +35,15 @@ namespace RH.Services.Worker
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-
+                .WriteTo.MySQL(Configuration["ConnectionStrings:MySqlConnectionString"], "CrawlerLog1")
+                .MinimumLevel.Override("Microsoft",LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .CreateLogger();
+            //Log.Logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(Configuration)
+
+            //    .CreateLogger();
 
             try
             {
@@ -72,12 +81,7 @@ namespace RH.Services.Worker
                 .UseSerilog()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
-                    services.AddHostedService<GfsWorker>();
-                    services.AddHostedService<EcmwfWorker>();
-
-                    services.AddHostedService<GfsWindWorker>();
-                    services.AddHostedService<EcmwfWindWorker>();
+                    
 
 
                     switch (databaseType)
@@ -91,10 +95,20 @@ namespace RH.Services.Worker
                         case "MySql":
                             connectionString = Configuration
                                 .GetConnectionString("MySqlConnectionString");
-                            services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString));
+                            services.AddDbContext<WeatherDbContext>(options =>
+                                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
                             break;
                     }
+                    services.AddHostedService<Worker>();
+                    services.AddHostedService<GfsWorker>();
+                    services.AddHostedService<EcmwfWorker>();
+
+                    services.AddHostedService<GfsWindWorker>();
+                    services.AddHostedService<EcmwfWindWorker>();
+
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
+
+                    services.AddTransient<ISystemSettingRepository, SystemSettingRepository>();
 
                     services.AddTransient<IDimensionRepository, DimensionRepository>();
                     services.AddTransient<IWindDimensionRepository, WindDimensionRepository>();
@@ -112,6 +126,8 @@ namespace RH.Services.Worker
                     services.AddTransient<EcmwfCityTileCrawler, EcmwfCityTileCrawler>();
                     services.AddTransient<GfsWindCrawler, GfsWindCrawler>();
                     services.AddTransient<EcmwfWindCrawler, EcmwfWindCrawler>();
+
+
                 });
 
             return builder;

@@ -1,10 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace RH.EntityFramework.Shared.Entities
 {
     public class SystemSettings
     {
         public int Id { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
         public int CrawlingInterval { get; set; }
 
         public BaseWorkerSetting BaseWorkerSetting { get; set; }

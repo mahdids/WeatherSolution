@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Tile;
 
@@ -18,13 +19,15 @@ namespace RH.Services.RestApi.Controller
         private readonly IDimensionManager _dimensionManager;
         private readonly ILogger<TilesController> _logger;
         private readonly ITileCrawler _tileCrawler;
+        private readonly ISystemSettingRepository _settingRepository;
 
 
-        public TilesController(IDimensionManager dimensionManager, ILogger<TilesController> logger, ITileCrawler tileCrawler)
+        public TilesController(IDimensionManager dimensionManager, ILogger<TilesController> logger, ITileCrawler tileCrawler, ISystemSettingRepository settingRepository)
         {
             _dimensionManager = dimensionManager;
             _logger = logger;
             _tileCrawler = tileCrawler;
+            _settingRepository = settingRepository;
         }
 
         [HttpGet]
@@ -40,7 +43,7 @@ namespace RH.Services.RestApi.Controller
             if (dimension == null)
                 return NotFound();
 
-            var stream =  _tileCrawler.GetDimensionContentAsync(dimension);
+            var stream =  _tileCrawler.GetDimensionContentAsync(dimension, await _settingRepository.GetCurrentSetting());
             if (stream == null)
             {
                 return NotFound();

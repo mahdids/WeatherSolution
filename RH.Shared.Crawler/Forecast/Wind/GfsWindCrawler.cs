@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RH.EntityFramework.Repositories.Wind;
@@ -16,30 +15,30 @@ namespace RH.Shared.Crawler.Forecast.Wind
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly GfsWindRepository _gfsRepository;
-        private readonly string _webBaseAddress;
         private readonly ILogger<GfsWindCrawler> _logger;
 
-        public GfsWindCrawler(IHttpClientFactory httpClientFactory, GfsWindRepository gfsRepository, IConfiguration configuration, ILogger<GfsWindCrawler> logger)
+        public GfsWindCrawler(IHttpClientFactory httpClientFactory, GfsWindRepository gfsRepository, ILogger<GfsWindCrawler> logger)
         {
             _httpClientFactory = httpClientFactory;
             _gfsRepository = gfsRepository;
-            _webBaseAddress = configuration["Forecast:Wind:GFS"];
+            //_webBaseAddress = configuration["Forecast:Wind:GFS"];
             _logger = logger;
         }
-        public async Task<CrawlResult> CrawlDimensionContentAsync(EntityFramework.Shared.Entities.WindDimension dimension)
+        public async Task<CrawlResult> CrawlDimensionContentAsync(
+            EntityFramework.Shared.Entities.WindDimension dimension, SystemSettings currentSetting)
         {
             var webPath = $"{dimension.X}/{dimension.Y}";
             try
             {
-                var client = _httpClientFactory.GetHttpClient(_webBaseAddress);
+                var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastWindGFS);
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode == HttpStatusCode.NotFound || item.StatusCode == HttpStatusCode.NoContent)
                 {
-                    _logger.LogInformation($"Crawl GFS Wind Record (No Content): {_webBaseAddress}/{webPath}");
+                    _logger.LogInformation($"Crawl GFS Wind Record (No Content): {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
-                var records =  DeserializeGfsContent(dimension.Id, contentString);
+                var records = DeserializeGfsContent(dimension.Id, contentString);
                 foreach (var record in records)
                 {
                     await _gfsRepository.Add(record);
@@ -47,11 +46,11 @@ namespace RH.Shared.Crawler.Forecast.Wind
 
 
 
-                _logger.LogInformation($"Crawl GFS Record : {_webBaseAddress}/{webPath}");
+                _logger.LogInformation($"Crawl GFS Wind Record : {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Crawl GFS Exception : {_webBaseAddress}/{webPath}");
+                _logger.LogError(e, $"Crawl GFS Wind Record : {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
             return new CrawlResult() { Succeeded = true };
@@ -69,7 +68,7 @@ namespace RH.Shared.Crawler.Forecast.Wind
         }
         public async Task<string> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.WindDimension dimension, long epocTime)
         {
-            
+
             var time = await _gfsRepository.GetNearestTime(dimension.Id, epocTime);
 
             if (time == 0)
@@ -119,13 +118,13 @@ namespace RH.Shared.Crawler.Forecast.Wind
                 };
                 returnValue.Add(currentRecord);
             }
-           
+
             return returnValue;
         }
 
-       
+
     }
 
-    
+
 }
 

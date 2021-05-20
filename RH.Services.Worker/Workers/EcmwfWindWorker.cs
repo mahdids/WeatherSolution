@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.WindDimension;
 
@@ -27,20 +28,33 @@ namespace RH.Services.Worker.Workers
         {
             using (var scope = _services.CreateScope())
             {
+                var systemSetting = scope.ServiceProvider.GetRequiredService<ISystemSettingRepository>();
+
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IWindDimensionManager>();
                 var ecmwfCrawler = scope.ServiceProvider.GetRequiredService<EcmwfWindCrawler>();
 
                 long currentWindyTime = 0;
                 long nextWindyTime = 0;
                 int roundConter = 0;
+                var currentSetting = await systemSetting.GetCurrentSetting();
+                var activeId = currentSetting.Id;
+
                 while (!stoppingToken.IsCancellationRequested)
                 {
+                    if (activeId != systemSetting.ActiveSettingId)
+                    {
+                        currentSetting = await systemSetting.GetCurrentSetting();
+                    }
+                    Thread.Sleep(5000); 
                     dimensionManager.ReloadDimensions();
                     _logger.LogInformation($"EcwmfWind Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
-
-                        await ecmwfCrawler.CrawlDimensionContentAsync(dimension);
+                        if (activeId != systemSetting.ActiveSettingId)
+                        {
+                            currentSetting = await systemSetting.GetCurrentSetting();
+                        }
+                        await ecmwfCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
                     }
 
                     _logger.LogInformation($"End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");

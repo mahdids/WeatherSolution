@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Dimension;
-using RH.Shared.Crawler.Forecast;
 using RH.Shared.Crawler.Forecast.CityTile;
-using RH.Shared.Crawler.Label;
-using RH.Shared.Crawler.Tile;
 using RH.Shared.Extensions;
 
 namespace RH.Services.Worker.Workers
@@ -20,17 +15,16 @@ namespace RH.Services.Worker.Workers
     {
         private readonly ILogger<EcmwfWorker> _logger;
         private readonly IServiceProvider _services;
-        private readonly IConfiguration _configuration;
-        public EcmwfWorker(ILogger<EcmwfWorker> logger, IServiceProvider services, IConfiguration configuration)
+        public EcmwfWorker(ILogger<EcmwfWorker> logger, IServiceProvider services)
         {
             _logger = logger;
             _services = services;
-            _configuration = configuration;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             using (var scope = _services.CreateScope())
             {
+                var systemSetting = scope.ServiceProvider.GetRequiredService<ISystemSettingRepository>();
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IDimensionManager>();
                 
                 var esmwfCrawler = scope.ServiceProvider.GetRequiredService<EcmwfCityTileCrawler>();
@@ -41,12 +35,14 @@ namespace RH.Services.Worker.Workers
                 int roundConter = 0;
                 while (!stoppingToken.IsCancellationRequested)
                 {
+                    Thread.Sleep(5000);
                     dimensionManager.ReloadDimensions();
                     _logger.LogInformation($"Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    var currentSetting = await systemSetting.GetCurrentSetting();
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
-
-                        await esmwfCrawler.CrawlDimensionContentAsync(dimension);
+                        currentSetting = await systemSetting.GetCurrentSetting();
+                        await esmwfCrawler.CrawlDimensionContentAsync(dimension,currentSetting);
                     }
 
                    
@@ -59,7 +55,7 @@ namespace RH.Services.Worker.Workers
                     {
                         while (DateTime.Now.ToWindyUnixTime(3).Start <= currentWindyTime && !stoppingToken.IsCancellationRequested)
                         {
-                            await Task.Delay(int.Parse(_configuration["CrawlingInterval"]), stoppingToken);
+                            await Task.Delay(currentSetting.CrawlingInterval, stoppingToken);
                         }
                     }
                     else
