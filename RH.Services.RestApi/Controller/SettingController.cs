@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Repositories.Settings;
+using RH.EntityFramework.Shared.Entities;
 
 namespace RH.Services.RestApi.Controller
 {
@@ -34,27 +35,37 @@ namespace RH.Services.RestApi.Controller
             return View(settings);
         }
 
-        // GET: SettingController/Details/5
-        public async Task<ActionResult> Details(int id)
-        {
-            var setting = await _settingRepository[id];
-            return View(setting);
-        }
+       
+       
 
         // GET: SettingController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            var activeSetting = await _settingRepository.GetActiveSystemSetting();
+            var newModel = new SystemSettings()
+            {
+                CrawlingInterval = activeSetting.CrawlingInterval,
+                Dimension = activeSetting.Dimension,
+                WindDimensions = activeSetting.WindDimensions,
+                BaseWorkerSetting = activeSetting.BaseWorkerSetting,
+                CrawlWebPath = activeSetting.CrawlWebPath
+            };
+            return View(newModel);
         }
 
         // POST: SettingController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(SystemSettings model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _settingRepository.AddDimensionAsync(model);
+                return RedirectToAction("Index");
             }
             catch
             {

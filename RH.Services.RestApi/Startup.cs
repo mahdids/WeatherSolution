@@ -1,11 +1,14 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
@@ -36,6 +39,7 @@ namespace RH.Services.RestApi
             Configuration = configuration;
             HostEnvironment = hostEnvironment;
         }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -53,9 +57,11 @@ namespace RH.Services.RestApi
                 case "MySql":
                     connectionString = Configuration
                         .GetConnectionString("MySqlConnectionString");
-                    services.AddDbContext<WeatherDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+                    services.AddDbContext<WeatherDbContext>(options =>
+                        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
                     break;
             }
+
             services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
             services.AddTransient<ISystemSettingRepository, SystemSettingRepository>();
@@ -75,9 +81,27 @@ namespace RH.Services.RestApi
             services.AddTransient<GfsWindCrawler, GfsWindCrawler>();
             services.AddTransient<EcmwfCityTileCrawler, EcmwfCityTileCrawler>();
             services.AddTransient<EcmwfWindCrawler, EcmwfWindCrawler>();
+            //services.AddSwaggerGen();
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "RH.Services.RestApi",
+                //Version = "v1",
+                //Description = "An API to perform Employee operations",
+                //TermsOfService = new Uri("https://example.com/terms"),
+                Contact = new OpenApiContact
+                {
+                    Name = "System Setting",
+                    //Email = "John.Walkner@gmail.com",
+                    //Url = new Uri(c.SwaggerGeneratorOptions.Servers.FirstOrDefault().Url+"/Setting")
+                },
+                //License = new OpenApiLicense
+                //{
+                //    Name = "Employee API LICX",
+                //    Url = new Uri("https://example.com/license"),
+                //}
+            }));
 
 
-            services.AddSwaggerGen();
             services.AddMvc(option => option.EnableEndpointRouting = false);
 
         }
@@ -95,12 +119,13 @@ namespace RH.Services.RestApi
 
             app.UseSwaggerUI(c =>
             {
+                
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Weather Service");
                 c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

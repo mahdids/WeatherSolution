@@ -20,4 +20,17 @@
     <ProjectReference Include="..\RH.Shared.Crawler\RH.Shared.Crawler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\lib\jquery\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+  </ItemGroup>
+
 </Project>
