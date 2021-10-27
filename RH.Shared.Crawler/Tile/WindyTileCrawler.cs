@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -34,13 +36,20 @@ namespace RH.Shared.Crawler.Tile
 
             try
             {
-                var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.TileWebPath);
-                var item = await client.GetAsync(webPath);
-                var contentStream = await item.Content.ReadAsStreamAsync(); // get the actual content stream
-                await using (var stream = new FileStream(filePath, FileMode.Create))
+                using (WebClient webClient = new WebClient())
                 {
-                    await contentStream.CopyToAsync(stream);
+                    byte[] data = webClient.DownloadData($"{currentSetting.CrawlWebPath.TileWebPath}/{webPath}");
+                    await File.WriteAllBytesAsync(filePath,data);
                 }
+
+
+                //var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.TileWebPath);
+                //var item = await client.GetAsync(webPath);
+                //var contentStream = await item.Content.ReadAsStreamAsync(); // get the actual content stream
+                //await using (var stream = new FileStream(filePath, FileMode.Create))
+                //{
+                //    await contentStream.CopyToAsync(stream);
+                //}
                 _logger.LogInformation( $"Crawl Tile Succeeded : {currentSetting.CrawlWebPath.TileWebPath}/{webPath}");
                 return new CrawlResult()
                 {

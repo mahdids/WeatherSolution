@@ -1,15 +1,97 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    ViewBag.Title = "Title";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="IR-fa" dir="rtl">
 
-<html>
 <head>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <link href="~/rh.min.css" rel="stylesheet" />
+    <!-- Icons -->
+    <link href="~/css/CoreUi/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/CoreUi/simple-line-icons.min.css" rel="stylesheet" />
+    <!-- Main styles for this application -->
+    <link href="~/css/web.css" rel="stylesheet" />
+    <link href="~/css/web.min.css" rel="stylesheet" />
+    <link href="~/css/CoreUi/persiandatepicker.css" rel="stylesheet" />
+    <link href="~/css/CoreUi/dest/style.css" rel="stylesheet" />
+
 </head>
-<body>
-    <div>
-        @RenderBody()
+
+<body class="navbar-fixed sidebar-nav fixed-nav">
+    <header class="navbar">
+        <div class="container-fluid text-center">
+            <ul class="nav navbar-nav hidden-md-down">
+                <li class="nav-item">
+                    <a class="nav-link navbar-toggler layout-toggler" href="#">&#9776;</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right hidden-md-down"  style="padding-left:10px;">
+                <div>@*<img src="~/Images/Seal.png" style="max-width: 100%; max-height: 100%;"/>*@</div>
+            </ul>
+            <div class="text-center font-weight-bold">
+                سیستم هوشمند مبدل داده ی شرایط آب و هوایی
+            </div>
+
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Home")"><i class="icon-speedometer"></i> خانه </a>
+                </li>
+
+            </ul>
+        </nav>
     </div>
-    @RenderSection("scripts", required: false)
+
+    <!-- Main content -->
+    <main class="main">
+
+        @RenderBody()
+
+    </main>
+
+
+    <script src="~/js/CoreUi/libs/jquery.min.js"></script>
+    <script src="~/js/CoreUi/app.js"></script>
+    <script src="~/js/CoreUi/libs/tether.min.js"></script>
+    <script src="~/js/CoreUi/libs/bootstrap.min.js"></script>
+    <script src="~/js/CoreUi/persian-date/jalali-moment.js"></script>
+    <script src="~/js/CoreUi/persian-date/persian-date.js"></script>
+    <script src="~/js/CoreUi/persian-date/pesian-datepicker.js"></script>
+
+    @*@await Html.PartialAsync("Common/Notification")*@
+
+    @await RenderSectionAsync("scripts", required: false)
 </body>
+
 </html>
+
+
+@*<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="~/rh.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="~/styles.css">
+
+
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        <div class="container" id="advanced-search-form">
+            @RenderBody()
+        </div>
+        @RenderSection("scripts", required: false)
+        <script src="~/rh.min.js"></script>
+    </body>
+    </html>*@

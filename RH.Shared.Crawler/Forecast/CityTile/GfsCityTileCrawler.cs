@@ -41,11 +41,17 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             try
             {
                 var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastCityTileGFS);
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode==HttpStatusCode.NotFound||item.StatusCode==HttpStatusCode.NoContent)
                 {
                     _logger.LogInformation($"Crawl GFS Record (No Content): {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
                     return new CrawlResult(){Succeeded = true};
+                }
+                if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.LogInformation($"Crawl GFS Record  (Forbidden): {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
+                    return new CrawlResult() { Succeeded = true };
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
                 var records =await DeserializeGfsContent(dimension.Id,contentString);
@@ -53,9 +59,6 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                 {
                     await _gfsRepository.Add(record);
                 }
-
-                
-                
                 _logger.LogInformation($"Crawl GFS Record : {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
             }
             catch (Exception e)

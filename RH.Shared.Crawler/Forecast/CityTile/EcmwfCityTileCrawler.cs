@@ -39,6 +39,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             try
             {
                 var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastCityTileECMWF);
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode == HttpStatusCode.NotFound || item.StatusCode == HttpStatusCode.NoContent)
                 {

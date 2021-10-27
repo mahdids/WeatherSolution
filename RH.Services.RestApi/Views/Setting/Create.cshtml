@@ -6,251 +6,186 @@
 }
 
 <!-- Form Name -->
-
-<div class="row">
-    <div class="col-md-4">
-        <form class="well form-horizontal" asp-action="Create" method="post" id="contact_form">
-            <fieldset>
-
-                <!-- Form Name -->
-                <legend>
-                    <h2>
-                        <b>System Setting Form</b>
-                    </h2>
-                </legend>
-                <br>
-
-                <!-- Text input-->
-
-                <div class="form-group">
-                    <label asp-for="CrawlingInterval" class="col-md-4 control-label">Crawling Interval</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlingInterval" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BaseWorkerSetting.RegenerateDimension" class="col-md-4 form-check-label">Regenerate Dimension</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="BaseWorkerSetting.RegenerateDimension" class="form-check-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="BaseWorkerSetting.RegenerateWindDimension" class="col-md-4 form-check-label">Regenerate Wind Dimension</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="BaseWorkerSetting.RegenerateWindDimension" class="form-check-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="BaseWorkerSetting.ReCrawlTileImage" class="col-md-4 form-check-label">ReCrawl Tile Image</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="BaseWorkerSetting.ReCrawlTileImage" class="form-check-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="BaseWorkerSetting.ReCrawlLabel" class="col-md-4 form-check-label">Re Crawl Label</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="BaseWorkerSetting.ReCrawlLabel" class="form-check-input">
-                        </div>
-                    </div>
-                </div>
+<h2>جستجوی پیشرفته</h2>
 
 
-                <div class="form-group">
-                    <label asp-for="Dimension.MinZoom" class="col-md-4 control-label">Dimension.MinZoom</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.MinZoom" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
+<form asp-action="Create" method="post" id="contact_form">
 
 
-                <div class="form-group">
-                    <label asp-for="Dimension.MaxZoom" class="col-md-4 control-label">Dimension.MaxZoom</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.MaxZoom" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Dimension.TopLeft.X" class="col-md-4 control-label">Dimension.TopLeft.X</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.TopLeft.X" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Dimension.TopLeft.Y" class="col-md-4 control-label">Dimension.TopLeft.Y</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.TopLeft.Y" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Dimension.BottomRight.X" class="col-md-4 control-label">Dimension.BottomRight.X</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.BottomRight.X" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Dimension.BottomRight.Y" class="col-md-4 control-label">Dimension.BottomRight.Y</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="WindDimensions.XInterval" class="col-md-4 control-label">WindDimensions.XInterval</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="WindDimensions.XInterval" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="WindDimensions.YInterval" class="col-md-4 control-label">WindDimensions.YInterval</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="WindDimensions.YInterval" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="WindDimensions.TopLeft.X" class="col-md-4 control-label">WindDimensions.TopLeft.X</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="WindDimensions.TopLeft.X" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="WindDimensions.TopLeft.Y" class="col-md-4 control-label">WindDimensions.TopLeft.Y</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="WindDimensions.TopLeft.Y" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="WindDimensions.BottomRight.X" class="col-md-4 control-label">WindDimensions.BottomRight.X</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="WindDimensions.BottomRight.X" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Dimension.BottomRight.Y" class="col-md-4 control-label">Dimension.BottomRight.Y</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.ForecastCityTileECMWF" class="col-md-4 control-label">ForecastCityTileECMWF</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.ForecastCityTileECMWF" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.ForecastCityTileGFS" class="col-md-4 control-label">ForecastCityTileGFS</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.ForecastCityTileGFS" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.ForecastWindECMWF" class="col-md-4 control-label">ForecastWindECMWF</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.ForecastWindECMWF" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.ForecastWindGFS" class="col-md-4 control-label">ForecastWindGFS</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.ForecastWindGFS" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.TileWebPath" class="col-md-4 control-label">TileWebPath</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.TileWebPath" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CrawlWebPath.TileDirectoryPath" class="col-md-4 control-label">TileDirectoryPath</label>
-                    <div class="col-md-4 inputGroupContainer">
-                        <div class="input-group">
-                            <input asp-for="CrawlWebPath.TileDirectoryPath" class="form-control" type="text">
-                        </div>
-                    </div>
-                </div>
-                
-            <div class="form-group">
-                <label asp-for="CrawlWebPath.LabelPath" class="col-md-4 control-label">LabelPath</label>
-                <div class="col-md-6 inputGroupContainer">
-                    <div class="input-group">
-                        <input asp-for="CrawlWebPath.LabelPath" class="form-control" type="text">
-                    </div>
-                </div>
-            </div>
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
-                    <div class="col-md-4">
-                        <br>
-                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                    </div>
-                </div>
-
-            </fieldset>
-
-        </form>
+    <div class="form-group">
+        <label asp-for="CrawlingInterval" class="  control-label">زمان خزش</label>
+        <input asp-for="CrawlingInterval" class="form-control" type="number">
     </div>
-</div>
+    <div class="form-group">
+        <label asp-for="BaseWorkerSetting.RegenerateDimension" class="  form-check-label">باز تولید ابعاد</label>
+        <input asp-for="BaseWorkerSetting.RegenerateDimension" class="form-check-input">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BaseWorkerSetting.RegenerateWindDimension" class="  form-check-label">باز تولید ابعاد باد</label>
+        <input asp-for="BaseWorkerSetting.RegenerateWindDimension" class="form-check-input">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BaseWorkerSetting.ReCrawlTileImage" class="  form-check-label">خزش تصاویر</label>
+
+        <input asp-for="BaseWorkerSetting.ReCrawlTileImage" class="form-check-input">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BaseWorkerSetting.ReCrawlLabel" class="  form-check-label">خزش اسامی</label>
+
+        <input asp-for="BaseWorkerSetting.ReCrawlLabel" class="form-check-input">
+
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Dimension.MinZoom" class="  control-label">Dimension.MinZoom</label>
+
+        <input asp-for="Dimension.MinZoom" class="form-control" type="number">
+
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Dimension.MaxZoom" class="  control-label">Dimension.MaxZoom</label>
+
+        <input asp-for="Dimension.MaxZoom" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dimension.TopLeft.X" class="  control-label">Dimension.TopLeft.X</label>
+
+        <input asp-for="Dimension.TopLeft.X" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dimension.TopLeft.Y" class="  control-label">Dimension.TopLeft.Y</label>
+
+        <input asp-for="Dimension.TopLeft.Y" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dimension.BottomRight.X" class="  control-label">Dimension.BottomRight.X</label>
+
+        <input asp-for="Dimension.BottomRight.X" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dimension.BottomRight.Y" class="  control-label">Dimension.BottomRight.Y</label>
+
+        <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WindDimensions.XInterval" class="  control-label">WindDimensions.XInterval</label>
+
+        <input asp-for="WindDimensions.XInterval" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WindDimensions.YInterval" class="  control-label">WindDimensions.YInterval</label>
+
+        <input asp-for="WindDimensions.YInterval" class="form-control" type="number">
+
+    </div>
+    <div class="form-group">
+        <label asp-for="WindDimensions.TopLeft.X" class="  control-label">WindDimensions.TopLeft.X</label>
+
+        <input asp-for="WindDimensions.TopLeft.X" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WindDimensions.TopLeft.Y" class="  control-label">WindDimensions.TopLeft.Y</label>
+
+        <input asp-for="WindDimensions.TopLeft.Y" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WindDimensions.BottomRight.X" class="  control-label">WindDimensions.BottomRight.X</label>
+
+        <input asp-for="WindDimensions.BottomRight.X" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Dimension.BottomRight.Y" class="  control-label">Dimension.BottomRight.Y</label>
+
+        <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.ForecastCityTileECMWF" class="  control-label">ForecastCityTileECMWF</label>
+
+        <input asp-for="CrawlWebPath.ForecastCityTileECMWF" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.ForecastCityTileGFS" class="  control-label">ForecastCityTileGFS</label>
+
+        <input asp-for="CrawlWebPath.ForecastCityTileGFS" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.ForecastWindECMWF" class="  control-label">ForecastWindECMWF</label>
+
+        <input asp-for="CrawlWebPath.ForecastWindECMWF" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.ForecastWindGFS" class="  control-label">ForecastWindGFS</label>
+
+        <input asp-for="CrawlWebPath.ForecastWindGFS" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.TileWebPath" class="  control-label">TileWebPath</label>
+
+        <input asp-for="CrawlWebPath.TileWebPath" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.TileDirectoryPath" class="  control-label">TileDirectoryPath</label>
+
+        <input asp-for="CrawlWebPath.TileDirectoryPath" class="form-control" type="text">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CrawlWebPath.LabelPath" class="  control-label">LabelPath</label>
+        <input asp-for="CrawlWebPath.LabelPath" class="form-control" type="text">
+
+    </div>
+    <div class="clearfix"></div>
+
+    <button type="submit" class="btn btn-info btn-lg btn-responsive" id="search"> ثبت <span class="glyphicon glyphicon-search"></span></button>
+    @*<div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4">
+                <br>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            </div>
+        </div>*@
+
+
+</form>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

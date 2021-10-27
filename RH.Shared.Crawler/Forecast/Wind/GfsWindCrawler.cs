@@ -37,6 +37,11 @@ namespace RH.Shared.Crawler.Forecast.Wind
                     _logger.LogInformation($"Crawl GFS Wind Record (No Content): {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
+                if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.LogInformation($"Crawl GFS Wind Record  (Forbidden): {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
+                    return new CrawlResult() { Succeeded = true };
+                }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
                 var records = DeserializeGfsContent(dimension.Id, contentString);
                 foreach (var record in records)

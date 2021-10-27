@@ -1,0 +1,105 @@
+@font-face {
+  font-family: 'b yekan';
+  src: url('fonts/BYekan.eot?#') format('eot'),  /* IE6–8 */
+       url('fonts/BYekan.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+       url('fonts/BYekan.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
+html {
+  background: url("Images/background.jpg") no-repeat;
+  background-size: cover;
+  min-height: 100%;
+}
+
+body {
+  background: none;
+  direction: rtl;
+  text-align: right;
+  font-family: 'b yekan';
+}
+
+#advanced-search-form {
+  background-color: #fff;
+  max-width: 800px;
+  margin: 160px auto 0;
+  padding: 40px;
+  color: #858b8e;
+  box-shadow: 6px 6px 6px rgba(0,0,0,0.2);
+}
+
+#advanced-search-form h2 {
+  padding-bottom: 20px;
+  margin: 10px 20px;
+  font-size: 24px;
+}
+
+#advanced-search-form hr {
+  margin-top: 38px;
+  margin-bottom: 54px;
+  margin-left: 3px;
+  border: 1px solid #cccccc;
+}
+
+#advanced-search-form .form-group {
+  margin-bottom: 20px;
+  margin-left: 20px;
+  width: 30%;
+  float: left;
+  text-align: right;
+}
+
+#advanced-search-form .form-control {
+  padding: 12px 20px;
+  height: auto;
+  border-radius: 2px;
+}
+
+#advanced-search-form .radio-inline {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#advanced-search-form .gender {
+  width: 30%;
+  margin-top: 30px;
+  padding-left: 20px padding-top : 5px;
+  padding-bottom: 5px;
+}
+
+#advanced-search-form .btn {
+  width: 46%;
+  margin: 20px auto 0;
+  display: block;
+  outline: none;
+}
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+  position: absolute;
+  margin-top: 4px\9;
+  margin-right: -20px;
+}
+.checkbox label, .radio label {
+  min-height: 20px;
+  padding-right: 20px;
+  margin-bottom: 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+@media screen and (max-width: 800px) {
+  #advanced-search-form .form-group {
+    width: 45%;
+  }
+
+  #advanced-search-form {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  #advanced-search-form .form-group {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  #advanced-search-form h2 {
+    text-align: center;
+  }
+}

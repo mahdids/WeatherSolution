@@ -32,10 +32,16 @@ namespace RH.Shared.Crawler.Forecast.Wind
             try
             {
                 var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastWindECMWF);
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var item = await client.GetAsync(webPath);
                 if (item.StatusCode == HttpStatusCode.NotFound || item.StatusCode == HttpStatusCode.NoContent)
                 {
                     _logger.LogInformation($"Crawl ECMWF Wind Record (No Content): {currentSetting.CrawlWebPath.ForecastWindECMWF}/{webPath}");
+                    return new CrawlResult() { Succeeded = true };
+                }
+                if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.LogInformation($"Crawl ECMWF Wind Record  (Forbidden): {currentSetting.CrawlWebPath.ForecastWindECMWF}/{webPath}");
                     return new CrawlResult() { Succeeded = true };
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream

@@ -55,14 +55,7 @@ namespace RH.Services.Worker
                 }
                 Thread.Sleep(5000);
             }
-            //if (_configuration["Worker:RegenerateDimension"] == "1")
-            //    await RegenerateAllDimensionAsync(dimensionManager);
-            //if (_configuration["Worker:RegenerateWindDimension"] == "1")
-            //    await RegenerateAllWindDimensionAsync(windDimensionManager);
-            //if (_configuration["Worker:CrawlLabel"] == "1")
-            //    await CrawlLabelAsync(dimensionManager, labelCrawler);
-            //if (_configuration["Worker:CrawlTile"] == "1")
-            //    await CrawlTileAsync(dimensionManager, tileCrawler);
+            
 
         }
 
@@ -97,13 +90,7 @@ namespace RH.Services.Worker
                 (short)currentSetting.Dimension.TopLeft.Y,
                 (short)currentSetting.Dimension.BottomRight.X,
                 (short)currentSetting.Dimension.BottomRight.Y);
-            //var result = await dimensionManager.RegenerateAllDimension(
-            //    short.Parse(_configuration["Dimensions:Zoom:Min"]),
-            //    short.Parse(_configuration["Dimensions:Zoom:Max"]),
-            //    short.Parse(_configuration["Dimensions:TopLeft:X"]),
-            //    short.Parse(_configuration["Dimensions:TopLeft:Y"]),
-            //    short.Parse(_configuration["Dimensions:BottomRight:X"]),
-            //    short.Parse(_configuration["Dimensions:BottomRight:Y"]));
+
         }
         private async Task RegenerateAllWindDimensionAsync(IWindDimensionManager windDimensionManager,
             SystemSettings currentSetting)
