@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
+using RH.Shared.Extensions;
 using RH.Shared.HttpClient;
 
 namespace RH.Shared.Crawler.Forecast.CityTile
@@ -110,6 +111,23 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             }
             var returnValue = SerializeEcmwfContent(records, nearestTime);
             return returnValue;
+        }
+        public async Task<List<EntityFramework.Shared.Entities.CityTile>> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.Dimension dimension, DateTime date)
+        {
+            var epocTime = date.ToWindyUnixTime(3).Start;
+            var prevDay = epocTime - 86400000;
+            var nextDay = epocTime + 86400000;
+            var time = await _ecmwfRepository.GetExistTime(dimension.Id, prevDay, nextDay);
+
+            if (time.Count == 0)
+            {
+                return new List<EntityFramework.Shared.Entities.CityTile>();
+            }
+
+            var nearestTimeDiff = time.Min(x => Math.Abs(x.Start - epocTime));
+            var nearestTime = time.FirstOrDefault(x => Math.Abs(x.Start - epocTime) == nearestTimeDiff);
+            var records = await _ecmwfRepository.GetContentByDimensionAndTime(dimension.Id, nearestTime.Id);
+            return new List<EntityFramework.Shared.Entities.CityTile>(records);
         }
         private string SerializeEcmwfContent(List<Ecmwf> records, WindyTime time)
         {

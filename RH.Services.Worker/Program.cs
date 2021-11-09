@@ -101,10 +101,10 @@ namespace RH.Services.Worker
                     }
                     services.AddHostedService<Worker>();
                     services.AddHostedService<GfsWorker>();
-                    services.AddHostedService<EcmwfWorker>();
+                    //services.AddHostedService<EcmwfWorker>();
 
-                    services.AddHostedService<GfsWindWorker>();
-                    services.AddHostedService<EcmwfWindWorker>();
+                    //services.AddHostedService<GfsWindWorker>();
+                    //services.AddHostedService<EcmwfWindWorker>();
 
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 

@@ -39,19 +39,24 @@ namespace RH.EntityFramework.Repositories.Wind
             return ecmwf;
         }
 
-       
+
 
         public async Task<List<EcmwfForecast>> GetContentByDimensionAndTime(int dimensionId, DateTime time)
         {
             return await _dbContext.EcmwfForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime == time)
                 .ToListAsync();
         }
-
         public async Task<List<EcmwfForecast>> GetContentByDimensionAndEpoc(int dimensionId, long time)
         {
             return await _dbContext.EcmwfForecasts.Where(x => x.WindDimensionId == dimensionId && x.OrigTs == time).OrderBy(x => x.ReferenceTime)
                 .ToListAsync();
         }
+        public async Task<List<EcmwfForecast>> GetContentByDimensionAndDateTime(int dimensionId, DateTime time)
+        {
+            return await _dbContext.EcmwfForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime == time).OrderBy(x => x.DateTime)
+               .ToListAsync();
+        }
+
 
         public async Task<DateTime> GetLastExistTime(int dimensionId)
         {
@@ -64,6 +69,15 @@ namespace RH.EntityFramework.Repositories.Wind
                 .MinAsync(x => Math.Abs(x.OrigTs - epocTime));
             var record = await _dbContext.EcmwfForecasts.FirstOrDefaultAsync(x => Math.Abs(x.OrigTs - epocTime) == minDiff);
             return record.OrigTs;
+
+        }
+
+        public async Task<DateTime?> GetNearestTime(int dimensionId, DateTime dateTime)
+        {
+            var record = await _dbContext.EcmwfForecasts
+                .Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime <= dateTime)
+                .OrderByDescending(x => x.ReferenceTime).FirstOrDefaultAsync();
+            return record?.ReferenceTime;
 
         }
     }

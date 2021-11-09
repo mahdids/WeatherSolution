@@ -83,7 +83,11 @@ namespace RH.EntityFramework.Repositories.Wind
             return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.OrigTs== time).OrderBy(x=>x.ReferenceTime)
                 .ToListAsync();
         }
-
+        public async Task<List<GfsForecast>> GetContentByDimensionAndDateTime(int dimensionId, DateTime time)
+        {
+            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime == time).OrderBy(x => x.DateTime)
+                .ToListAsync();
+        }
         public async Task<DateTime> GetLastExistTime(int dimensionId)
         {
             return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId).MaxAsync(x => x.ReferenceTime);
@@ -95,6 +99,14 @@ namespace RH.EntityFramework.Repositories.Wind
                 .MinAsync(x => Math.Abs(x.OrigTs - epocTime));
             var record=await _dbContext.GfsForecasts.FirstOrDefaultAsync(x => Math.Abs(x.OrigTs - epocTime) == minDiff);
             return record.OrigTs;
+
+        }
+        public async Task<DateTime?> GetNearestTime(int dimensionId, DateTime dateTime)
+        {
+            var record = await _dbContext.GfsForecasts
+                .Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime <= dateTime)
+                .OrderByDescending(x => x.ReferenceTime).FirstOrDefaultAsync();
+            return record?.ReferenceTime;
 
         }
     }

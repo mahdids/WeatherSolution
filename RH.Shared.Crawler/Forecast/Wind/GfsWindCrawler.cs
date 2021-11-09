@@ -89,6 +89,21 @@ namespace RH.Shared.Crawler.Forecast.Wind
             var returnValue = SerializeGfsContent(records);
             return returnValue;
         }
+
+        public async Task<List<GfsForecast>> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.WindDimension dimension, DateTime dateTime)
+        {
+
+            var time = await _gfsRepository.GetNearestTime(dimension.Id, dateTime);
+
+            if (time == null)
+            {
+                return new List<GfsForecast>();
+            }
+
+            var records = await _gfsRepository.GetContentByDimensionAndDateTime(dimension.Id, (DateTime)time);
+            return records;
+
+        }
         private string SerializeGfsContent(List<GfsForecast> records)
         {
             return JsonConvert.SerializeObject(records);

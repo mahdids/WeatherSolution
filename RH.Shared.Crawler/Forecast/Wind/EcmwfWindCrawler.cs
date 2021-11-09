@@ -91,6 +91,20 @@ namespace RH.Shared.Crawler.Forecast.Wind
             var returnValue = SerializeEcmwfContent(records);
             return returnValue;
         }
+        public async Task<List<EcmwfForecast>> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.WindDimension dimension, DateTime dateTime)
+        {
+
+            var time = await _ecmwfRepository.GetNearestTime(dimension.Id, dateTime);
+
+            if (time == null)
+            {
+                return new List<EcmwfForecast>();
+            }
+
+            var records = await _ecmwfRepository.GetContentByDimensionAndDateTime(dimension.Id, (DateTime) time);
+            return records;
+            
+        }
         private string SerializeEcmwfContent(List<EcmwfForecast> records)
         {
             return JsonConvert.SerializeObject(records);

@@ -6,14 +6,14 @@ using RH.EntityFramework.Shared.Entities;
 
 namespace RH.Services.RestApi.Models
 {
-    public class ForecastWebViewModel
+    public class CityTileWebViewModel
     {
-        public ForecastWebViewModel()
+        public CityTileWebViewModel()
         {
-            Forecasts = new List<Forecast>();
+            CityTiles = new List<CityTile>();
         }
         public bool HasData { get; set; }
 
-        public List<Forecast> Forecasts { get; set; }
+        public List<CityTile> CityTiles { get; set; }
     }
 }

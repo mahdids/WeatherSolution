@@ -1,26 +1,26 @@
-﻿@model RH.Services.RestApi.Models.ForecastWebViewModel;
+﻿@model RH.Services.RestApi.Models.CityTileWebViewModel;
 
 @{
-    ViewBag.Title = "آب و هوا";
+    ViewBag.Title = "دما";
     Layout = "_Layout";
 }
+
 
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="">
             <div class="card">
                 <div class="card-header">
-                    <h2>آب و هوا</h2>
+                    <h2>دما</h2>
                 </div>
                 <div class="card-block">
-
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-controller="ForecastWeb" asp-action="Index" method="get" class="form-horizontal ">
+                            <form asp-controller="CityTileWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <select id="forecastType" name="ForecastType" class="form-control">
-                                            @if (ViewBag.forecastType == "GFS")
+                                        <select id="cityTileType" name="cityTileType" class="form-control" value="@ViewBag.cityTileType">
+                                            @if (ViewBag.cityTileType == "GFS")
                                             {
                                                 <option value="GFS" selected="selected">GFS</option>
                                                 <option value="ECMWF">ECMWF</option>
@@ -33,10 +33,14 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" />
+                                        <input name="Zoom" value="@ViewBag.Zoom" type="text" placeholder="بزرگنمایی" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <input name="X" value="@ViewBag.X" type="text" placeholder="طول" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" />
+                                        <input name="Y" value="@ViewBag.Y" type="text" placeholder="عرض" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
@@ -50,6 +54,7 @@
                     </div>
                     @if (Model.HasData)
                     {
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
@@ -58,30 +63,24 @@
                                             <thead>
                                                 <tr>
                                                     <th>ردیف</th>
-                                                    <th>ReferenceTime</th>
-                                                    <th>DateTime</th>
-                                                    <th>WeatherCode</th>
-                                                    <th>Mm</th>
+                                                    <th>X</th>
+                                                    <th>Y</th>
+                                                    <th>Time</th>
                                                     <th>Temperature</th>
-                                                    <th>Wind</th>
-                                                    <th>WindDirection</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @{
                                                     int index = 0;
-                                                    foreach (var record in Model.Forecasts)
+                                                    foreach (var record in Model.CityTiles)
                                                     {
                                                         index++;
                                                         <tr>
                                                             <td class="align-middle">@index</td>
-                                                            <td class="align-middle">@record.ReferenceTime</td>
-                                                            <td class="align-middle">@record.DateTime</td>
-                                                            <td class="align-middle">@record.WeatherCode</td>
-                                                            <td class="align-middle">@record.Mm</td>
-                                                            <td class="align-middle">@record.Temperature</td>
-                                                            <td class="align-middle">@record.Wind</td>
-                                                            <td class="align-middle">@record.WindDirection</td>
+                                                            <td class="align-middle">@record.X</td>
+                                                            <td class="align-middle">@record.Y</td>
+                                                            <td class="align-middle">@record.WindyDateTime</td>
+                                                            <td class="align-middle">@record.DataString</td>
                                                         </tr>
                                                     }
 
@@ -103,10 +102,9 @@
                             </div>
                         </div>
                     }
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-

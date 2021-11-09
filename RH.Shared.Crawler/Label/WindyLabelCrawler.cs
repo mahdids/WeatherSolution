@@ -91,5 +91,10 @@ namespace RH.Shared.Crawler.Label
             returnValue += "]";
             return returnValue;
         }
+        public async Task<List<EntityFramework.Shared.Entities.Label>> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension)
+        {
+            var labels =await _labelRepository.GetLabelsByDimensionId(dimension.Id);
+            return labels;
+        }
     }
 }

@@ -2,7 +2,8 @@
 
 namespace RH.EntityFramework.Shared.Entities
 {
-    public class EcmwfForecast
+
+    public class Forecast
     {
         public long Id { get; set; }
         public int WindDimensionId { get; set; }
@@ -25,4 +26,11 @@ namespace RH.EntityFramework.Shared.Entities
         public virtual WindDimension WindDimension { get; set; }
 
     }
+    public class EcmwfForecast:Forecast
+    { }
+
+    public class GfsForecast : Forecast
+    { }
+
+
 }

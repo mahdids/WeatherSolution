@@ -102,7 +102,7 @@ namespace RH.Services.RestApi
             }));
 
 
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddMvc(option => option.EnableEndpointRouting = true);
 
         }
 
@@ -114,22 +114,25 @@ namespace RH.Services.RestApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
                 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Weather Service");
-                c.RoutePrefix = string.Empty;
+                c.RoutePrefix = "Service";
             });
-
-            app.UseRouting();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+                //endpoints.MapDefaultControllerRoute();
             });
+
+
         }
     }
 }

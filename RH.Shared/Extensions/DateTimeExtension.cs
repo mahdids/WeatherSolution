@@ -20,6 +20,12 @@ namespace RH.Shared.Extensions
             return new WindyUnixTime(unixDateTime,step);
         }
 
-        
+        public static DateTime ToDateTime(this WindyUnixTime windyUnixTime)
+        {
+            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(windyUnixTime.Start);
+            return dateTimeOffset.DateTime;
+        }
+
+
     }
 }

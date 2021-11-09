@@ -1,5 +1,103 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model RH.Services.RestApi.Models.TilesViewModel;
+
 @{
+    ViewBag.Title = "کاشی ها";
+    Layout = "_Layout";
 }
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="">
+            <div class="card">
+                <div class="card-header">
+                    <h2>کاشی‌ها</h2>
+                </div>
+                <div class="card-block">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-controller="TilesWeb" asp-action="Index" method="get" class="form-horizontal ">
+                                <div class="form-group row">
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <input name="Zoom" value="@ViewBag.Zoom" type="text" placeholder="بزرگنمایی" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <input name="X" value="@ViewBag.X" type="text" placeholder="طول" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <input name="Y" value="@ViewBag.Y" type="text" placeholder="عرض" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
+                                        <button type="submit" class="btn btn-primary w-100">دریافت کاشی</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    @if (Model.HasData)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="row">
+
+                                            <div class="col-md-8">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ردیف</th>
+                                                            <th>نام</th>
+                                                            <th>نوع</th>
+                                                            <th>طول</th>
+                                                            <th>عرض</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            int index = 0;
+                                                            foreach (var record in Model.Labels)
+                                                            {
+                                                                index++;
+                                                                <tr>
+                                                                    <td class="align-middle">@index</td>
+                                                                    <td class="align-middle">@record.Name</td>
+                                                                    <td class="align-middle">@record.Type</td>
+                                                                    <td class="align-middle">@record.X</td>
+                                                                    <td class="align-middle">@record.Y</td>
+                                                                </tr>
+                                                            }
+
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <img src="@Model.Src" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                داده ای برای نمایش وجود ندارد
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

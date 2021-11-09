@@ -2,7 +2,7 @@
 
 namespace RH.EntityFramework.Shared.Entities
 {
-    public class Ecmwf
+    public class CityTile
     {
         public long Id { get; set; }
         //public long Start { get; set; }
@@ -18,5 +18,13 @@ namespace RH.EntityFramework.Shared.Entities
         public virtual Dimension Dimension { get; set; }
 
         public virtual WindyTime WindyTime { get; set; }
+
+        public DateTime WindyDateTime=> DateTimeOffset.FromUnixTimeMilliseconds(WindyTime.Start).DateTime;
+
+    }
+
+    public class Ecmwf : CityTile
+    {
+
     }
 }

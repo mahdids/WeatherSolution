@@ -23,15 +23,11 @@
 <body class="navbar-fixed sidebar-nav fixed-nav">
     <header class="navbar">
         <div class="container-fluid text-center">
-            <ul class="nav navbar-nav hidden-md-down">
-                <li class="nav-item">
-                    <a class="nav-link navbar-toggler layout-toggler" href="#">&#9776;</a>
-                </li>
-            </ul>
+            
             <ul class="nav navbar-nav pull-right hidden-md-down"  style="padding-left:10px;">
-                <div>@*<img src="~/Images/Seal.png" style="max-width: 100%; max-height: 100%;"/>*@</div>
+                <div><img class="nav-link navbar-toggler layout-toggler"  src="~/Images/Seal.png" style="position: fixed; padding-right: 15px; padding-top: 15px; max-width: 5%; max-height: 5%; "/></div>
             </ul>
-            <div class="text-center font-weight-bold">
+            <div class="text-center font-weight-bold" style="">
                 سیستم هوشمند مبدل داده ی شرایط آب و هوایی
             </div>
 
@@ -44,6 +40,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index","Home")"><i class="icon-speedometer"></i> خانه </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","TilesWeb")"><i class="icon-speedometer"></i> کاشی ها </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","ForecastWeb")"><i class="icon-speedometer"></i> آب و هوا </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","CityTileWeb")"><i class="icon-speedometer"></i> دما</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Service/index.html" target="_blank"><i class="icon-speedometer"></i> سرویس</a>
+                </li>
+                
 
             </ul>
         </nav>

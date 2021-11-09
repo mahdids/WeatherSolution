@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using RH.EntityFramework.Repositories.Forecast.GFS;
 using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
+using RH.Shared.Extensions;
 using RH.Shared.HttpClient;
 
 namespace RH.Shared.Crawler.Forecast.CityTile
@@ -18,7 +19,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
         private readonly IGfsRepository _gfsRepository;
         //private readonly string _webBaseAddress;
         private readonly ILogger<GfsCityTileCrawler> _logger;
-        private WindyTime _maxTime=new WindyTime();
+        private WindyTime _maxTime = new WindyTime();
         private WindyTime _lastTime = new WindyTime();
 
         public GfsCityTileCrawler(IHttpClientFactory httpClientFactory, ILogger<GfsCityTileCrawler> logger, IGfsRepository gfsRepository)
@@ -43,10 +44,10 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                 var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastCityTileGFS);
                 //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var item = await client.GetAsync(webPath);
-                if (item.StatusCode==HttpStatusCode.NotFound||item.StatusCode==HttpStatusCode.NoContent)
+                if (item.StatusCode == HttpStatusCode.NotFound || item.StatusCode == HttpStatusCode.NoContent)
                 {
                     _logger.LogInformation($"Crawl GFS Record (No Content): {currentSetting.CrawlWebPath.ForecastCityTileGFS}/{webPath}");
-                    return new CrawlResult(){Succeeded = true};
+                    return new CrawlResult() { Succeeded = true };
                 }
                 if (item.StatusCode == HttpStatusCode.Forbidden || item.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -54,7 +55,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                     return new CrawlResult() { Succeeded = true };
                 }
                 var contentString = await item.Content.ReadAsStringAsync(); // get the actual content stream
-                var records =await DeserializeGfsContent(dimension.Id,contentString);
+                var records = await DeserializeGfsContent(dimension.Id, contentString);
                 foreach (var record in records)
                 {
                     await _gfsRepository.Add(record);
@@ -68,7 +69,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             }
             return new CrawlResult() { Succeeded = true };
         }
-       
+
         public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.Dimension dimension,
             SystemSettings currentSetting)
         {
@@ -79,7 +80,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                 //var result= await GetDimensionContentAsync(dimension);
             }
             time = await _gfsRepository.GetLastExistTime(dimension.Id);
-            if (time==null)
+            if (time == null)
             {
                 return string.Empty;
             }
@@ -98,7 +99,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             var nextDay = epocTime + 86400000;
             var time = await _gfsRepository.GetExistTime(dimension.Id, prevDay, nextDay);
 
-            if (time.Count==0 )
+            if (time.Count == 0)
             {
                 return string.Empty;
             }
@@ -114,19 +115,37 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             return returnValue;
         }
 
+        public async Task<List<EntityFramework.Shared.Entities.CityTile>> GetDimensionContentByTimeAsync(EntityFramework.Shared.Entities.Dimension dimension, DateTime date)
+        {
+            var epocTime = date.ToWindyUnixTime(3).Start;
+            var prevDay = epocTime - 86400000;
+            var nextDay = epocTime + 86400000;
+            var time = await _gfsRepository.GetExistTime(dimension.Id, prevDay, nextDay);
+
+            if (time.Count == 0)
+            {
+                return new List<EntityFramework.Shared.Entities.CityTile>();
+            }
+
+            var nearestTimeDiff = time.Min(x => Math.Abs(x.Start - epocTime));
+            var nearestTime = time.FirstOrDefault(x => Math.Abs(x.Start - epocTime) == nearestTimeDiff);
+            var records = await _gfsRepository.GetContentByDimensionAndTime(dimension.Id, nearestTime.Id);
+            return new List<EntityFramework.Shared.Entities.CityTile>(records);
+        }
+
         private async Task<List<Gfs>> DeserializeGfsContent(int dimensionId, string content)
         {
-            var returnValue=new List<Gfs>();
+            var returnValue = new List<Gfs>();
             var records = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
             var start = long.Parse(records["start"].ToString());
             records.Remove("start");
 
             var step = short.Parse(records["step"].ToString());
             records.Remove("step");
-            if (_lastTime.Start!=start)
+            if (_lastTime.Start != start)
             {
-                _lastTime= await _gfsRepository.GetTime(start, step);
-                if (_maxTime.Start<_lastTime.Start)
+                _lastTime = await _gfsRepository.GetTime(start, step);
+                if (_maxTime.Start < _lastTime.Start)
                 {
                     _maxTime = _lastTime;
                 }
@@ -142,7 +161,7 @@ namespace RH.Shared.Crawler.Forecast.CityTile
                     Location = record.Key,
                     X = double.Parse(locPart[0]),
                     Y = double.Parse(locPart[1]),
-                    DataString = record.Value.ToString().Replace("\r\n",""),
+                    DataString = record.Value.ToString().Replace("\r\n", ""),
                     WindyTimeId = _lastTime.Id
                 });
             }
@@ -163,6 +182,6 @@ namespace RH.Shared.Crawler.Forecast.CityTile
             return JsonConvert.SerializeObject(returnValue);
         }
 
-       
+
     }
 }
