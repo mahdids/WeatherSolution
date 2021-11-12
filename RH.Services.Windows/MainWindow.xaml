@@ -1,0 +1,30 @@
+﻿<Window x:Class="RH.Services.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RH.Services.Windows"
+        mc:Ignorable="d"
+        Title="انتقال اطلاعات" Height="250" Width="640" FontFamily="B Titr">
+    <Grid FlowDirection="RightToLeft">
+        <GroupBox Header="انتخاب فایل" Margin="20,20,20,0" Height="100" VerticalAlignment="Top">
+            <Grid x:Name="gridInput" >
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFD6D6D6" Offset="0.011"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Label Content="آدرس :" Height="30"  Margin="20,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70"/>
+                <TextBox Name="txtPath" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Width="360" Margin="70,0,0,0" Background="White" TextAlignment="Left" FontFamily="Times New Roman"  />
+                <Button Content="..." Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" Margin="440,0,0,0" Click="btnBrowse_Click"/>
+                <Button Name="PerformTask" Content="ثبت" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" Margin="480,0,0,0" Click="Button_Click"/>
+            </Grid>
+        </GroupBox>
+        <Grid x:Name="gridResult" Visibility="Visible">
+            <ProgressBar Name="MyProgressBar" Margin="20,140,20,0" Height="30" VerticalAlignment="Top" Visibility="Visible"/>
+            <TextBlock Margin="250,147,250,0" Name="MyProgressLabel" Text="{Binding ElementName=MyProgressBar, Path=Value, StringFormat={}{0:0}%}" VerticalAlignment="Top" TextAlignment="Center" Visibility="Visible" />
+            <TextBlock Margin="200,177,200,0" Name="MyProgressstate" Text="انتقال" VerticalAlignment="Top" TextAlignment="Center" Visibility="Visible" FontFamily="B Nazanin" FontSize="14" FontWeight="Bold"  />
+        </Grid>
+    </Grid>
+</Window>
