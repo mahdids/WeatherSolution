@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DLLs\netCDF4.8.0-NC4-32.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DLLs\netCDF4.8.0-NC4-32.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
     <PackageReference Include="SDSCore" Version="1.2.0" />
   </ItemGroup>
