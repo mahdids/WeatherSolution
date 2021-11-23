@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace RH.EntityFramework.Shared.Entities
@@ -7,11 +8,15 @@ namespace RH.EntityFramework.Shared.Entities
     {
         public int Id { get; set; }
 
+        [Display(Name="فعال/غیرفعال")]
         public bool IsActive { get; set; }
-
+        [Display(Name ="تاریخ ایجاد")]
         public DateTime CreateDate { get; set; }
+        [Display(Name = "تاریخ انقضا")]
 
         public DateTime? EndDate { get; set; }
+        [Display(Name ="بازه ی فراخوانی(میلی ثانیه)")]
+
         public int CrawlingInterval { get; set; }
 
         public BaseWorkerSetting BaseWorkerSetting { get; set; }

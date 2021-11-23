@@ -2,53 +2,78 @@
 @model IEnumerable<RH.EntityFramework.Shared.Entities.SystemSettings>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "تنظیمات";
+    Layout = "_Layout";
 }
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="">
+            <div class="card">
+                <div class="card-header">
+                    <h2>تنظیمات</h2>
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a asp-action="Create">تنظیمات جدید</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
 
-<h1>Index</h1>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.IsActive)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.CreateDate)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.EndDate)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.CrawlingInterval)
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.IsActive)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.CreateDate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.EndDate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.CrawlingInterval)
+                                                    </td>
+                                                    <td>
+                                                        @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                                                        @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CrawlingInterval)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CrawlingInterval)
-                </td>
-                <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
