@@ -19,6 +19,7 @@
                             <form asp-controller="ForecastWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="forecastType" class="control-label">منبع</label>
                                         <select id="forecastType" name="ForecastType" class="form-control">
                                             @if (ViewBag.forecastType == "GFS")
                                             {
@@ -33,16 +34,22 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="X" class="control-label">طول جغرافیایی</label>
+
                                         <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="Y" class="control-label">عرض جغرافیایی</label>
                                         <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="Date" class="control-label">زمان</label>
+
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        <button type="submit" class="btn btn-primary w-100">جستجو</button>
+                                        
+                                        <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>
                                     </div>
                                 </div>
                             </form>

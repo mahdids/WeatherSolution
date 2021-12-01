@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.WindDimension;
+using RH.EntityFramework.Repositories.Cycle;
 
 namespace RH.Services.Worker.Workers
 {
@@ -26,30 +27,46 @@ namespace RH.Services.Worker.Workers
                 var systemSetting = scope.ServiceProvider.GetRequiredService<ISystemSettingRepository>();
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IWindDimensionManager>();
                 var gfsCrawler = scope.ServiceProvider.GetRequiredService<GfsWindCrawler>();
-
-                long currentWindyTime = 0;
-                long nextWindyTime = 0;
+                var cycleRepository = scope.ServiceProvider.GetRequiredService<ICycleRepository>();
                 int roundConter = 0;
                 var currentSetting = await systemSetting.GetCurrentSetting();
                 var activeId = currentSetting.Id;
-
+                var returnTime = "";
+                DateTime? time = default;
                 while (!stoppingToken.IsCancellationRequested)
                 {
 
                     Thread.Sleep(5000);
                     dimensionManager.ReloadDimensions();
-                    _logger.LogInformation($"GfsWind Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    _logger.LogInformation($"GfsWind Start Round {roundConter++} , Current:{DateTime.Now} ");
+                    var cycle = new RH.EntityFramework.Shared.Entities.Cycle()
+                    {
+                        Type = "GFSWind",
+                        StartTime = DateTime.Now,
+                        Compeleted = false,
+                        dateTime = time == default ? null : time,
+                    };
+                    await cycleRepository.AddCycleAsync(cycle);
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
                         if (activeId != systemSetting.ActiveSettingId)
                         {
                             currentSetting = await systemSetting.GetCurrentSetting();
                         }
-                        await gfsCrawler.CrawlDimensionContentAsync(dimension,currentSetting);
+                        var result = await gfsCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
+                        if (result.Succeeded)
+                            returnTime = result.Message;
                     }
+                    time = DateTime.Parse(returnTime).AddHours(3);
+                    cycle.Compeleted = true;
+                    cycle.EndTime = DateTime.Now;
+                    await cycleRepository.AddCycleAsync(cycle);
+                    _logger.LogInformation($"GfsWind End Round  {roundConter} , Current:{DateTime.Now} , Next:{time}");
 
-                    _logger.LogInformation($"End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");
-
+                    while (time > DateTime.Now)
+                    {
+                        Thread.Sleep(currentSetting.CrawlingInterval);
+                    }
                 }
             }
         }

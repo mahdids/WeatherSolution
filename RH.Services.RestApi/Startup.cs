@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using RH.EntityFramework.Repositories.Cycle;
 using RH.EntityFramework.Repositories.Dimension;
 using RH.EntityFramework.Repositories.Forecast.ECMWF;
 using RH.EntityFramework.Repositories.Forecast.GFS;
@@ -65,6 +66,7 @@ namespace RH.Services.RestApi
             services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 
             services.AddTransient<ISystemSettingRepository, SystemSettingRepository>();
+            services.AddTransient<ICycleRepository, CycleRepository>();
             services.AddTransient<IDimensionRepository, DimensionRepository>();
             services.AddTransient<IWindDimensionRepository, WindDimensionRepository>();
             services.AddTransient<ILabelRepository, LabelRepository>();

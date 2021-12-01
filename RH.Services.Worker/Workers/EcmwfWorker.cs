@@ -8,6 +8,7 @@ using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Dimension;
 using RH.Shared.Crawler.Forecast.CityTile;
 using RH.Shared.Extensions;
+using RH.EntityFramework.Repositories.Cycle;
 
 namespace RH.Services.Worker.Workers
 {
@@ -28,8 +29,8 @@ namespace RH.Services.Worker.Workers
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IDimensionManager>();
                 
                 var esmwfCrawler = scope.ServiceProvider.GetRequiredService<EcmwfCityTileCrawler>();
+                var cycleRepository = scope.ServiceProvider.GetRequiredService<ICycleRepository>();
 
-                
                 long currentWindyTime = 0;
                 long nextWindyTime = 0;
                 int roundConter = 0;
@@ -37,8 +38,15 @@ namespace RH.Services.Worker.Workers
                 {
                     Thread.Sleep(5000);
                     dimensionManager.ReloadDimensions();
-                    _logger.LogInformation($"Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    _logger.LogInformation($"Ecmwf Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
                     var currentSetting = await systemSetting.GetCurrentSetting();
+                    var cycle = new RH.EntityFramework.Shared.Entities.Cycle()
+                    {
+                        Type = "Ecmwf",
+                        StartTime = DateTime.Now,
+                        Compeleted = false,
+                    };
+                    await cycleRepository.AddCycleAsync(cycle); 
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
                         currentSetting = await systemSetting.GetCurrentSetting();
@@ -50,12 +58,18 @@ namespace RH.Services.Worker.Workers
                     {
                         nextWindyTime = esmwfCrawler.MaxTime.Start;
                     }
-                    _logger.LogInformation($"End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    _logger.LogInformation($"Ecmwf End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    cycle.Compeleted = true;
+                    cycle.EndTime = DateTime.Now;
+                    await cycleRepository.AddCycleAsync(cycle);
                     if (nextWindyTime == currentWindyTime)
                     {
-                        while (DateTime.Now.ToWindyUnixTime(3).Start <= currentWindyTime && !stoppingToken.IsCancellationRequested)
+                        nextWindyTime += 60 * 60 * 3;
+                        var windyNow = DateTime.Now.ToWindyUnixTime(3);
+                        while (windyNow.Start <= nextWindyTime && !stoppingToken.IsCancellationRequested)
                         {
                             await Task.Delay(currentSetting.CrawlingInterval, stoppingToken);
+                            windyNow = DateTime.Now.ToWindyUnixTime(3);
                         }
                     }
                     else

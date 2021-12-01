@@ -1,7 +1,7 @@
-﻿@model RH.Services.RestApi.Models.TilesViewModel;
+﻿@model List<RH.Services.RestApi.Models.ReportWebViewModel>;
 
 @{
-    ViewBag.Title = "کاشی ها";
+    ViewBag.Title = "گزارش";
     Layout = "_Layout";
 }
 
@@ -10,13 +10,13 @@
         <div class="">
             <div class="card">
                 <div class="card-header">
-                    <h2>کاشی‌ها</h2>
+                    <h2>گزارش</h2>
                 </div>
                 <div class="card-block">
 
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-controller="TilesWeb" asp-action="Index" method="get" class="form-horizontal ">
+                            @*<form asp-controller="TilesWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
 
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
@@ -38,10 +38,10 @@
                                     </div>
                                 </div>
 
-                            </form>
+                            </form>*@
                         </div>
                     </div>
-                    @if (Model.HasData)
+                    @if (Model.Count!=0)
                     {
                         <div class="row">
                             <div class="col-md-12">
@@ -49,29 +49,29 @@
                                     <div class="card-block">
                                         <div class="row">
 
-                                            <div class="col-md-8">
+                                            <div class="col-md-12">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
                                                             <th>ردیف</th>
-                                                            <th>نام</th>
                                                             <th>نوع</th>
-                                                            <th>طول</th>
-                                                            <th>عرض</th>
+                                                            <th>زمان شروع</th>
+                                                            <th>زمان پایان</th>
+                                                            <th>تکمیل شده</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @{
                                                             int index = 0;
-                                                            foreach (var record in Model.Labels)
+                                                            foreach (var record in Model)
                                                             {
                                                                 index++;
                                                                 <tr>
                                                                     <td class="align-middle">@index</td>
-                                                                    <td class="align-middle">@record.Name</td>
                                                                     <td class="align-middle">@record.Type</td>
-                                                                    <td class="align-middle">@record.X</td>
-                                                                    <td class="align-middle">@record.Y</td>
+                                                                    <td class="align-middle">@record.StartTime</td>
+                                                                    <td class="align-middle">@record.EndTime</td>
+                                                                    <td class="align-middle">@record.Compeleted</td>
                                                                 </tr>
                                                             }
 
@@ -79,9 +79,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="col-md-4">
-                                                <img src="@Model.Src" />
-                                            </div>
+                                            
                                         </div>
                                     </div>
 
@@ -102,5 +100,3 @@
         </div>
     </div>
 </div>
-
-

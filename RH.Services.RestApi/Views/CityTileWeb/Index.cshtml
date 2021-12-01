@@ -18,7 +18,8 @@
                         <div class="col-md-12">
                             <form asp-controller="CityTileWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-6 col-lg-4 col-xl-1 mb-3">
+                                        <label asp-for="cityTileType" class="control-label">منبع</label>
                                         <select id="cityTileType" name="cityTileType" class="form-control" value="@ViewBag.cityTileType">
                                             @if (ViewBag.cityTileType == "GFS")
                                             {
@@ -33,20 +34,24 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <input name="Zoom" value="@ViewBag.Zoom" type="text" placeholder="بزرگنمایی" class="form-control" />
+                                        <label asp-for="Zoom" class="control-label">بزرگنمایی</label>
+                                        <input name="Zoom" value="@ViewBag.Zoom" type="number" placeholder="بزرگنمایی" class="form-control" />
                                     </div>
 
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <input name="X" value="@ViewBag.X" type="text" placeholder="طول" class="form-control" />
+                                        <label asp-for="X" class="control-label">طول</label>
+                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <input name="Y" value="@ViewBag.Y" type="text" placeholder="عرض" class="form-control" />
+                                        <label asp-for="Y" class="control-label">عرض</label>
+                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="Date" class="control-label">زمان</label>
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        <button type="submit" class="btn btn-primary w-100">جستجو</button>
+                                        <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>
                                     </div>
                                 </div>
                             </form>

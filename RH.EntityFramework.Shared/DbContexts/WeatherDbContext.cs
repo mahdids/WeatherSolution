@@ -5,7 +5,7 @@ namespace RH.EntityFramework.Shared.DbContexts
 {
     public class WeatherDbContext: DbContext
     {
-
+        public DbSet<Cycle> Cycles { get; set; }
         public DbSet<Dimension> Dimensions { get; set; }
         public DbSet<WindDimension> WindDimensions { get; set; }
         public DbSet<GfsForecast> GfsForecasts { get; set; }

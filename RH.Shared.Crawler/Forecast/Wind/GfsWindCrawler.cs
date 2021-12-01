@@ -28,6 +28,7 @@ namespace RH.Shared.Crawler.Forecast.Wind
             EntityFramework.Shared.Entities.WindDimension dimension, SystemSettings currentSetting)
         {
             var webPath = $"{dimension.X}/{dimension.Y}";
+            var returnTime = "";
             try
             {
                 var client = _httpClientFactory.GetHttpClient(currentSetting.CrawlWebPath.ForecastWindGFS);
@@ -46,6 +47,7 @@ namespace RH.Shared.Crawler.Forecast.Wind
                 var records = DeserializeGfsContent(dimension.Id, contentString);
                 foreach (var record in records)
                 {
+                    returnTime = record.ReferenceTime.ToString();
                     await _gfsRepository.Add(record);
                 }
 
@@ -58,7 +60,7 @@ namespace RH.Shared.Crawler.Forecast.Wind
                 _logger.LogError(e, $"Crawl GFS Wind Record : {currentSetting.CrawlWebPath.ForecastWindGFS}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
-            return new CrawlResult() { Succeeded = true };
+            return new CrawlResult() { Succeeded = true,Message=returnTime };
         }
         public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.WindDimension dimension)
         {

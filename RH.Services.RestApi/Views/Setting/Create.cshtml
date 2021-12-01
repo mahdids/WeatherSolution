@@ -11,7 +11,7 @@
         <div class="">
             <div class="card">
                 <div class="card-header">
-                    <h2>دما</h2>
+                    <h2>افزودن تنظیمات جدید</h2>
                 </div>
                 <div class="card-block">
                     <div class="row">
@@ -20,8 +20,8 @@
 
                                 <div class="form-group row">
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3" style="direction:rtl">
-                                        <label asp-for="CrawlingInterval" class="control-label">زمان خزش</label>
-                                        <input asp-for="CrawlingInterval" class="form-control" type="number">
+                                        <label asp-for="CrawlingInterval" class="control-label">زمان خزش(میلی ثانیه)</label>
+                                        <input asp-for="CrawlingInterval" class="form-control form-control-setting" type="number">
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <input asp-for="BaseWorkerSetting.RegenerateDimension" class="form-check-input">
@@ -44,148 +44,149 @@
                                     </div>
 
 
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="Dimension.MinZoom" class="  control-label">Dimension.MinZoom</label>
 
-                                        <input asp-for="Dimension.MinZoom" class="form-control" type="number">
-
-                                    </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label asp-for="Dimension.MinZoom" class="  control-label">Dimension.MinZoom</label>
+
+                                    <input asp-for="Dimension.MinZoom" class="form-control form-control-setting" type="number">
+
+                                </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.MaxZoom" class="  control-label">Dimension.MaxZoom</label>
 
-                                    <input asp-for="Dimension.MaxZoom" class="form-control" type="number">
+                                    <input asp-for="Dimension.MaxZoom" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.TopLeft.X" class="  control-label">Dimension.TopLeft.X</label>
 
-                                    <input asp-for="Dimension.TopLeft.X" class="form-control" type="number">
+                                    <input asp-for="Dimension.TopLeft.X" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.TopLeft.Y" class="  control-label">Dimension.TopLeft.Y</label>
 
-                                    <input asp-for="Dimension.TopLeft.Y" class="form-control" type="number">
+                                    <input asp-for="Dimension.TopLeft.Y" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.BottomRight.X" class="  control-label">Dimension.BottomRight.X</label>
 
-                                    <input asp-for="Dimension.BottomRight.X" class="form-control" type="number">
+                                    <input asp-for="Dimension.BottomRight.X" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.BottomRight.Y" class="  control-label">Dimension.BottomRight.Y</label>
 
-                                    <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
+                                    <input asp-for="Dimension.BottomRight.Y" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="WindDimensions.XInterval" class="  control-label">WindDimensions.XInterval</label>
 
-                                    <input asp-for="WindDimensions.XInterval" class="form-control" type="number">
+                                    <input asp-for="WindDimensions.XInterval" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="WindDimensions.YInterval" class="  control-label">WindDimensions.YInterval</label>
 
-                                    <input asp-for="WindDimensions.YInterval" class="form-control" type="number">
+                                    <input asp-for="WindDimensions.YInterval" class="form-control form-control-setting" type="number">
 
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="WindDimensions.TopLeft.X" class="  control-label">WindDimensions.TopLeft.X</label>
 
-                                    <input asp-for="WindDimensions.TopLeft.X" class="form-control" type="number">
+                                    <input asp-for="WindDimensions.TopLeft.X" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="WindDimensions.TopLeft.Y" class="  control-label">WindDimensions.TopLeft.Y</label>
 
-                                    <input asp-for="WindDimensions.TopLeft.Y" class="form-control" type="number">
+                                    <input asp-for="WindDimensions.TopLeft.Y" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="WindDimensions.BottomRight.X" class="  control-label">WindDimensions.BottomRight.X</label>
 
-                                    <input asp-for="WindDimensions.BottomRight.X" class="form-control" type="number">
+                                    <input asp-for="WindDimensions.BottomRight.X" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="Dimension.BottomRight.Y" class="  control-label">Dimension.BottomRight.Y</label>
 
-                                    <input asp-for="Dimension.BottomRight.Y" class="form-control" type="number">
+                                    <input asp-for="Dimension.BottomRight.Y" class="form-control form-control-setting" type="number">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.ForecastCityTileECMWF" class="  control-label">ForecastCityTileECMWF</label>
 
-                                    <input asp-for="CrawlWebPath.ForecastCityTileECMWF" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.ForecastCityTileECMWF" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.ForecastCityTileGFS" class="  control-label">ForecastCityTileGFS</label>
 
-                                    <input asp-for="CrawlWebPath.ForecastCityTileGFS" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.ForecastCityTileGFS" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.ForecastWindECMWF" class="  control-label">ForecastWindECMWF</label>
 
-                                    <input asp-for="CrawlWebPath.ForecastWindECMWF" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.ForecastWindECMWF" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.ForecastWindGFS" class="  control-label">ForecastWindGFS</label>
 
-                                    <input asp-for="CrawlWebPath.ForecastWindGFS" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.ForecastWindGFS" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.TileWebPath" class="  control-label">TileWebPath</label>
 
-                                    <input asp-for="CrawlWebPath.TileWebPath" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.TileWebPath" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.TileDirectoryPath" class="  control-label">TileDirectoryPath</label>
 
-                                    <input asp-for="CrawlWebPath.TileDirectoryPath" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.TileDirectoryPath" class="form-control form-control-setting" type="text">
 
                                 </div>
 
                                 <div class="form-group">
                                     <label asp-for="CrawlWebPath.LabelPath" class="  control-label">LabelPath</label>
-                                    <input asp-for="CrawlWebPath.LabelPath" class="form-control" type="text">
+                                    <input asp-for="CrawlWebPath.LabelPath" class="form-control form-control-setting" type="text">
 
                                 </div>
                                 <div class="clearfix"></div>
 
                                 <button type="submit" class="btn btn-info btn-lg btn-responsive" id="search"> ثبت <span class="glyphicon glyphicon-search"></span></button>
                                 @*<div class="form-group">
-                                        <label class="col-md-4 control-label"></label>
-                                        <div class="col-md-4">
-                                            <br>
-                                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                                        </div>
-                                    </div>*@
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4">
+                <br>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            </div>
+        </div>*@
 
 
                             </form>

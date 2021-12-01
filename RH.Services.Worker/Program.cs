@@ -9,6 +9,7 @@ using RH.EntityFramework.Repositories.Forecast.GFS;
 using RH.EntityFramework.Repositories.Label;
 using RH.EntityFramework.Repositories.Settings;
 using RH.EntityFramework.Repositories.Wind;
+using RH.EntityFramework.Repositories.Cycle;
 using RH.EntityFramework.Shared.DbContexts;
 using RH.Services.Worker.Workers;
 using RH.Shared.Crawler.Dimension;
@@ -110,6 +111,7 @@ namespace RH.Services.Worker
 
                     services.AddTransient<ISystemSettingRepository, SystemSettingRepository>();
 
+                    services.AddTransient<ICycleRepository, CycleRepository>();
                     services.AddTransient<IDimensionRepository, DimensionRepository>();
                     services.AddTransient<IWindDimensionRepository, WindDimensionRepository>();
                     services.AddTransient<ILabelRepository, LabelRepository>();

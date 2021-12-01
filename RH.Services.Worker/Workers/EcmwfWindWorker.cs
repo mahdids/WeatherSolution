@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Repositories.Settings;
+using RH.EntityFramework.Repositories.Cycle;
 using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.WindDimension;
 
@@ -31,14 +32,14 @@ namespace RH.Services.Worker.Workers
                 var systemSetting = scope.ServiceProvider.GetRequiredService<ISystemSettingRepository>();
 
                 var dimensionManager = scope.ServiceProvider.GetRequiredService<IWindDimensionManager>();
+                var cycleRepository = scope.ServiceProvider.GetRequiredService<ICycleRepository>();
                 var ecmwfCrawler = scope.ServiceProvider.GetRequiredService<EcmwfWindCrawler>();
 
-                long currentWindyTime = 0;
-                long nextWindyTime = 0;
                 int roundConter = 0;
                 var currentSetting = await systemSetting.GetCurrentSetting();
                 var activeId = currentSetting.Id;
-
+                var returnTime = "";
+                DateTime? time = default;
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     if (activeId != systemSetting.ActiveSettingId)
@@ -47,18 +48,34 @@ namespace RH.Services.Worker.Workers
                     }
                     Thread.Sleep(5000); 
                     dimensionManager.ReloadDimensions();
-                    _logger.LogInformation($"EcwmfWind Start Round {roundConter++} , Current:{currentWindyTime} , Next:{nextWindyTime}");
+                    _logger.LogInformation($"EcmwfWind Start Round {roundConter++} , Current:{DateTime.Now} ");
+                    var cycle = new RH.EntityFramework.Shared.Entities.Cycle()
+                    {
+                        Type = "EcmwfWind",
+                        StartTime = DateTime.Now,
+                        Compeleted = false,
+                        dateTime=time==default?null:time,
+                    };
+                    await cycleRepository.AddCycleAsync(cycle);
                     foreach (var dimension in dimensionManager.Dimensions)
                     {
                         if (activeId != systemSetting.ActiveSettingId)
                         {
                             currentSetting = await systemSetting.GetCurrentSetting();
                         }
-                        await ecmwfCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
+                        var result = await ecmwfCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
+                        if (result.Succeeded)
+                            returnTime = result.Message;
                     }
-
-                    _logger.LogInformation($"End Round {roundConter} , Current:{currentWindyTime} , Next:{nextWindyTime}");
-
+                     time = DateTime.Parse(returnTime).AddHours(3);
+                    cycle.Compeleted = true;
+                    cycle.EndTime = DateTime.Now;
+                    await cycleRepository.AddCycleAsync(cycle);
+                    _logger.LogInformation($"EcmwfWind End Round {roundConter} , Current:{DateTime.Now} , Next:{time}");
+                    while (time > DateTime.Now)
+                    {
+                        Thread.Sleep(currentSetting.CrawlingInterval);
+                    }
                 }
             }
         }
