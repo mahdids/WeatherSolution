@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace RH.EntityFramework.Shared.Entities
 {
@@ -11,6 +12,7 @@ namespace RH.EntityFramework.Shared.Entities
         public double X { get; set; }
         public double Y { get; set; }
         public DateTime RegisterDate { get; set; }
+        [Comment("Kelvin")]
         public string DataString { get; set; }
         public int DimensionId { get; set; }
 

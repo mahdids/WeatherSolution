@@ -1,13 +1,15 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 @{
-    ViewBag.Title = "Title";
+    //ViewBag.Title = "Title";
     Layout = null;
 }
 <!DOCTYPE html>
 <html lang="IR-fa" dir="rtl">
 
 <head>
+    <title>@ViewBag.Title</title>
+    <link id="favicon" href="~/Images/Seal.png" rel="shortcut icon" type="image/x-icon" />
     <link href="~/rh.min.css" rel="stylesheet" />
     <!-- Icons -->
     <link href="~/css/CoreUi/font-awesome.min.css" rel="stylesheet" />

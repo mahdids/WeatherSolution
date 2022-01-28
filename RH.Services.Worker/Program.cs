@@ -35,11 +35,14 @@ namespace RH.Services.Worker
             .Build();
         public static void Main(string[] args)
         {
+            //Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.MySQL(Configuration["ConnectionStrings:MySqlConnectionString"], "CrawlerLog1")
+            //    .MinimumLevel.Override("Microsoft",LogEventLevel.Warning)
+            //    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Warning)
+            //    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            //    .CreateLogger();
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.MySQL(Configuration["ConnectionStrings:MySqlConnectionString"], "CrawlerLog1")
-                .MinimumLevel.Override("Microsoft",LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
             //Log.Logger = new LoggerConfiguration()
             //    .ReadFrom.Configuration(Configuration)
@@ -105,6 +108,7 @@ namespace RH.Services.Worker
                     services.AddHostedService<EcmwfWorker>();
 
                     services.AddHostedService<GfsWindWorker>();
+                    services.AddHostedService<GfsWindLevelsWorker>();
                     services.AddHostedService<EcmwfWindWorker>();
 
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();

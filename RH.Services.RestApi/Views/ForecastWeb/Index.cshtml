@@ -1,9 +1,11 @@
-﻿@model RH.Services.RestApi.Models.ForecastWebViewModel;
+﻿@using RH.EntityFramework.Shared.Entities
+@model RH.Services.RestApi.Models.ForecastWebViewModel;
 
 @{
     ViewBag.Title = "آب و هوا";
     Layout = "_Layout";
 }
+
 
 <div class="container-fluid">
     <div class="animated fadeIn">
@@ -13,14 +15,13 @@
                     <h2>آب و هوا</h2>
                 </div>
                 <div class="card-block">
-
                     <div class="row">
                         <div class="col-md-12">
                             <form asp-controller="ForecastWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-6 col-lg-4 col-xl-1 mb-3">
                                         <label asp-for="forecastType" class="control-label">منبع</label>
-                                        <select id="forecastType" name="ForecastType" class="form-control">
+                                        <select id="forecastType" name="ForecastType" class="form-control" value="@ViewBag.ForecastType">
                                             @if (ViewBag.forecastType == "GFS")
                                             {
                                                 <option value="GFS" selected="selected">GFS</option>
@@ -34,8 +35,21 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="X" class="control-label">طول جغرافیایی</label>
+                                        <label asp-for="Altitude" class="control-label">ارتفاع</label>
+                                        @Html.DropDownList("Altitude", 
+                                            Html.GetEnumSelectList<ForecastLevel>(),
+                                            "ارتفاع مورد نظر را انتخاب کنید",new { @class = "form-control" })
+                                        <!--<select asp-for="Altitude" asp-items="Html.GetEnumSelectList<ForecastLevel>()">-->
+                                            @*<select id="Altitude" name="Altitude" value="@ViewBag.Altitude" class="form-control">
 
+            <option value="GFS" selected="selected">GFS</option>
+            <option value="ECMWF">ECMWF</option>*@
+
+                                        <!--</select>-->
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                        <label asp-for="X" class="control-label">طول جغرافیایی</label>
                                         <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
@@ -44,11 +58,9 @@
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <label asp-for="Date" class="control-label">زمان</label>
-
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        
                                         <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>
                                     </div>
                                 </div>
@@ -65,13 +77,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>ردیف</th>
-                                                    <th>ReferenceTime</th>
-                                                    <th>DateTime</th>
-                                                    <th>WeatherCode</th>
-                                                    <th>Mm</th>
-                                                    <th>Temperature</th>
-                                                    <th>Wind</th>
-                                                    <th>WindDirection</th>
+                                                    <th>مرجع زمانی</th>
+                                                    <th>زمان</th>
+                                                    <th>کد آب و هوا</th>
+                                                    <th>میزان بارش (میلیمتر)</th>
+                                                    <th>دما (کلوین)</th>
+                                                    <th>سرعت باد (متر بر ثانیه)</th>
+                                                    <th>جهت باد (درجه)</th>
+                                                    <th>فشار (hPa)<th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -85,10 +98,11 @@
                                                             <td class="align-middle">@record.ReferenceTime</td>
                                                             <td class="align-middle">@record.DateTime</td>
                                                             <td class="align-middle">@record.WeatherCode</td>
-                                                            <td class="align-middle">@record.Mm</td>
-                                                            <td class="align-middle">@record.Temperature</td>
-                                                            <td class="align-middle">@record.Wind</td>
+                                                            <td class="align-middle">@record.Mm.ToString("F2")</td>
+                                                            <td class="align-middle">@record.Temperature.ToString("F4")</td>
+                                                            <td class="align-middle">@record.Wind.ToString("F4")</td>
                                                             <td class="align-middle">@record.WindDirection</td>
+                                                            <td class="align-middle">@record.Level</td>
                                                         </tr>
                                                     }
 

@@ -19,7 +19,7 @@ namespace RH.Services.RestApi.Controller
 
         public async Task<IActionResult> Index()
         {
-            var dblist = await _cycleRepository.GetCyclesAsync(1, 15);
+            var dblist = await _cycleRepository.GetCyclesAsync(1, 100);
             var returnList = new List<ReportWebViewModel>();
             foreach (var item in dblist)
             {

@@ -34,6 +34,8 @@ namespace RH.EntityFramework.Shared.Entities
         public string ForecastCityTileGFS { get; set; }
         public string ForecastCityTileECMWF { get; set; }
         public string ForecastWindGFS { get; set; }
+        public string ForecastWindGFSLevel { get; set; }
+        public string ForecastWindGFSLevelKeys { get; set; }
         public string ForecastWindECMWF { get; set; }
         public string LabelPath { get; set; }
         public string TileWebPath { get; set; }

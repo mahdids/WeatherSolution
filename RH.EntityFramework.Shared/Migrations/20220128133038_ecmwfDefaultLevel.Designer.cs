@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RH.EntityFramework.Shared.DbContexts;
 
 namespace RH.EntityFramework.Shared.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    partial class WeatherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220128133038_ecmwfDefaultLevel")]
+    partial class ecmwfDefaultLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,8 +75,7 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("longtext")
-                        .HasComment("Kelvin");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
@@ -110,19 +111,16 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<double>("ConvPrecip")
-                        .HasColumnType("double")
-                        .HasComment("Millimeter");
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<double>("DewPoint")
-                        .HasColumnType("double")
-                        .HasComment("Kelvin");
+                        .HasColumnType("double");
 
                     b.Property<double>("Gust")
-                        .HasColumnType("double")
-                        .HasComment("m/s");
+                        .HasColumnType("double");
 
                     b.Property<byte>("Level")
                         .HasColumnType("tinyint unsigned");
@@ -131,12 +129,10 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("double");
 
                     b.Property<long>("OrigTs")
-                        .HasColumnType("bigint")
-                        .HasComment("Epoch Time");
+                        .HasColumnType("bigint");
 
                     b.Property<double>("Pressure")
-                        .HasColumnType("double")
-                        .HasComment("Pascal");
+                        .HasColumnType("double");
 
                     b.Property<bool>("Rain")
                         .HasColumnType("tinyint(1)");
@@ -145,33 +141,28 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Rh")
-                        .HasColumnType("int")
-                        .HasComment("Percent");
+                        .HasColumnType("int");
 
                     b.Property<bool>("Snow")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<double>("SnowPrecip")
-                        .HasColumnType("double")
-                        .HasComment("Millimeter");
+                        .HasColumnType("double");
 
                     b.Property<double>("Temperature")
-                        .HasColumnType("double")
-                        .HasComment("Kelvin");
+                        .HasColumnType("double");
 
                     b.Property<string>("WeatherCode")
                         .HasColumnType("longtext");
 
                     b.Property<double>("Wind")
-                        .HasColumnType("double")
-                        .HasComment("m/s");
+                        .HasColumnType("double");
 
                     b.Property<int>("WindDimensionId")
                         .HasColumnType("int");
 
                     b.Property<int>("WindDirection")
-                        .HasColumnType("int")
-                        .HasComment("Degree");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -187,8 +178,7 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataString")
-                        .HasColumnType("longtext")
-                        .HasComment("Kelvin");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("DimensionId")
                         .HasColumnType("int");
@@ -224,19 +214,16 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<double>("ConvPrecip")
-                        .HasColumnType("double")
-                        .HasComment("Millimeter");
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<double>("DewPoint")
-                        .HasColumnType("double")
-                        .HasComment("Kelvin");
+                        .HasColumnType("double");
 
                     b.Property<double>("Gust")
-                        .HasColumnType("double")
-                        .HasComment("m/s");
+                        .HasColumnType("double");
 
                     b.Property<byte>("Level")
                         .HasColumnType("tinyint unsigned");
@@ -245,12 +232,10 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("double");
 
                     b.Property<long>("OrigTs")
-                        .HasColumnType("bigint")
-                        .HasComment("Epoch Time");
+                        .HasColumnType("bigint");
 
                     b.Property<double>("Pressure")
-                        .HasColumnType("double")
-                        .HasComment("Pascal");
+                        .HasColumnType("double");
 
                     b.Property<bool>("Rain")
                         .HasColumnType("tinyint(1)");
@@ -259,33 +244,28 @@ namespace RH.EntityFramework.Shared.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Rh")
-                        .HasColumnType("int")
-                        .HasComment("Percent");
+                        .HasColumnType("int");
 
                     b.Property<bool>("Snow")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<double>("SnowPrecip")
-                        .HasColumnType("double")
-                        .HasComment("Millimeter");
+                        .HasColumnType("double");
 
                     b.Property<double>("Temperature")
-                        .HasColumnType("double")
-                        .HasComment("Kelvin");
+                        .HasColumnType("double");
 
                     b.Property<string>("WeatherCode")
                         .HasColumnType("longtext");
 
                     b.Property<double>("Wind")
-                        .HasColumnType("double")
-                        .HasComment("m/s");
+                        .HasColumnType("double");
 
                     b.Property<int>("WindDimensionId")
                         .HasColumnType("int");
 
                     b.Property<int>("WindDirection")
-                        .HasColumnType("int")
-                        .HasComment("Degree");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

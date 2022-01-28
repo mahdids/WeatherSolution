@@ -24,8 +24,9 @@ namespace RH.EntityFramework.Repositories.Wind
 
         public async Task<GfsForecast> Add(GfsForecast gfs)
         {
-            var dbRecord = await _dbContext.GfsForecasts.FirstOrDefaultAsync(x => x.WindDimensionId== gfs.WindDimensionId
-                                                                      && x.DateTime == gfs.DateTime&&x.ReferenceTime==gfs.ReferenceTime);
+            var dbRecord = await _dbContext.GfsForecasts.FirstOrDefaultAsync(x =>
+                x.WindDimensionId == gfs.WindDimensionId
+                && x.DateTime == gfs.DateTime && x.ReferenceTime == gfs.ReferenceTime && x.Level == gfs.Level);
             if (dbRecord == null)
             {
                 _dbContext.GfsForecasts.Add(gfs);
@@ -36,6 +37,8 @@ namespace RH.EntityFramework.Repositories.Wind
             }
 
             await _dbContext.SaveChangesAsync();
+            if(_dbContext.ChangeTracker.Entries().Count()>1)
+                _dbContext.ChangeTracker.Clear();
             return gfs;
         }
 
@@ -75,17 +78,18 @@ namespace RH.EntityFramework.Repositories.Wind
 
         public async Task<List<GfsForecast>> GetContentByDimensionAndTime(int dimensionId, DateTime time)
         {
-            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime== time)
+            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime == time)
                 .ToListAsync();
         }
         public async Task<List<GfsForecast>> GetContentByDimensionAndEpoc(int dimensionId, long time)
         {
-            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.OrigTs== time).OrderBy(x=>x.ReferenceTime)
+            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.OrigTs == time).OrderBy(x => x.ReferenceTime)
                 .ToListAsync();
         }
-        public async Task<List<GfsForecast>> GetContentByDimensionAndDateTime(int dimensionId, DateTime time)
+        public async Task<List<GfsForecast>> GetContentByDimensionAndDateTime(int dimensionId,
+            ForecastLevel level, DateTime time)
         {
-            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.ReferenceTime == time).OrderBy(x => x.DateTime)
+            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.Level == level && x.ReferenceTime == time).OrderBy(x => x.DateTime)
                 .ToListAsync();
         }
         public async Task<DateTime> GetLastExistTime(int dimensionId)
@@ -95,9 +99,9 @@ namespace RH.EntityFramework.Repositories.Wind
 
         public async Task<long> GetNearestTime(int dimensionId, long epocTime)
         {
-            var minDiff =await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId)
+            var minDiff = await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId)
                 .MinAsync(x => Math.Abs(x.OrigTs - epocTime));
-            var record=await _dbContext.GfsForecasts.FirstOrDefaultAsync(x => Math.Abs(x.OrigTs - epocTime) == minDiff);
+            var record = await _dbContext.GfsForecasts.FirstOrDefaultAsync(x => Math.Abs(x.OrigTs - epocTime) == minDiff);
             return record.OrigTs;
 
         }
@@ -109,5 +113,12 @@ namespace RH.EntityFramework.Repositories.Wind
             return record?.ReferenceTime;
 
         }
+
+
+        //public void ClearTracker()
+        //{
+        //    _dbContext.ChangeTracker.Entries().Count()>
+        //    _dbContext.ChangeTracker.Clear();
+        //}
     }
 }
