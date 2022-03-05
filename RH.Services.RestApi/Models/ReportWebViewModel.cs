@@ -16,6 +16,8 @@ namespace RH.Services.RestApi.Models
         public DateTime? dateTime { get; set; }
 
         public string TimeDiff => Compeleted ? $"{(EndTime.Value - StartTime).Minutes}" : "-";
+
+        public string ColorClass => Compeleted ? "" : "table-info";
         public string Status { get; set; }
     }
 }

@@ -19,9 +19,22 @@
                             <form asp-action="Create" method="post" id="contact_form" class="form-horizontal ">
 
                                 <div class="form-group row">
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3" style="direction:rtl">
+
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3" style="direction: rtl">
                                         <label asp-for="CrawlingInterval" class="control-label">زمان خزش(میلی ثانیه)</label>
                                         <input asp-for="CrawlingInterval" class="form-control form-control-setting" type="number">
+
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3" style="direction: rtl">
+                                        <label asp-for="Resolution" class="control-label">رزولوشن</label>
+                                        <select asp-for="Resolution" class="form-control form-control-setting">
+                                            <option value="1">100%</option>
+                                            <option value="2">50%</option>
+                                            <option value="3">33%</option>
+                                            <option value="4">25%</option>
+                                            <option value="5">20%</option>
+                                        </select>
+
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <input asp-for="BaseWorkerSetting.RegenerateDimension" class="form-check-input">
@@ -42,6 +55,7 @@
                                         <input asp-for="BaseWorkerSetting.ReCrawlLabel" class="form-check-input">
                                         <label asp-for="BaseWorkerSetting.ReCrawlLabel" class="  form-check-label">خزش اسامی</label>
                                     </div>
+
 
 
 
@@ -141,7 +155,6 @@
                                     <label asp-for="CrawlWebPath.ForecastCityTileGFS" class="  control-label">ForecastCityTileGFS</label>
 
                                     <input asp-for="CrawlWebPath.ForecastCityTileGFS" class="form-control form-control-setting" type="text">
-
                                 </div>
 
                                 <div class="form-group">

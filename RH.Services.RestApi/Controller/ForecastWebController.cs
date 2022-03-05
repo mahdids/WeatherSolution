@@ -35,7 +35,7 @@ namespace RH.Services.RestApi.Controller
             {
                 date = DateTime.Now;
             }
-
+            ViewBag.Borders = _dimensionManager.GetBorder();
             ViewBag.Altitude = Altitude;
             ViewBag.X = x;
             ViewBag.Y = y;

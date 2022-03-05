@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 
 namespace RH.Shared.Crawler.WindDimension
@@ -12,5 +13,7 @@ namespace RH.Shared.Crawler.WindDimension
         Task<DimensionManagerResult> RegenerateAllDimension(double intervalX, double intervalY,double minX, double minY, double maxX, double maxY);
         Task<EntityFramework.Shared.Entities.WindDimension> GetDimension(double x,double y, bool autoAdd = true);
         void ReloadDimensions();
+        DimensionBorder GetBorder();
     }
+
 }

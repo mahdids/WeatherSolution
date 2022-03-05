@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Common;
 using RH.EntityFramework.Shared.DbContexts;
+using RH.EntityFramework.Shared.Entities;
 
 namespace RH.EntityFramework.Repositories.Dimension
 {
@@ -90,6 +92,19 @@ namespace RH.EntityFramework.Repositories.Dimension
                 await _dbContext.SaveChangesAsync();
             }
             return dimension;
+        }
+
+        public DimensionBorder GetBorder()
+        {
+            return new DimensionBorder()
+            {
+                MinZ = _dbContext.Dimensions.Min(x => x.Zoom),
+                MaxZ = _dbContext.Dimensions.Max(x => x.Zoom),
+                MinX = _dbContext.Dimensions.Min(x => x.X),
+                MaxX = _dbContext.Dimensions.Max(x => x.X),
+                MinY = _dbContext.Dimensions.Min(x => x.Y),
+                MaxY = _dbContext.Dimensions.Max(x => x.Y),
+            };
         }
     }
 }

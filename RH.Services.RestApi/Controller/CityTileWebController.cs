@@ -37,6 +37,7 @@ namespace RH.Services.RestApi.Controller
             {
                 date = DateTime.Now;
             }
+            ViewBag.Borders = _dimensionManager.GetBorder();
             ViewBag.Zoom = zoom;
             ViewBag.X = x;
             ViewBag.Y = y;

@@ -65,6 +65,31 @@ namespace RH.Shared.Crawler.Forecast.Wind
             }
             return new CrawlResult() { Succeeded = true, Message = returnTime };
         }
+        public async Task<CrawlResult> SetDimensionContentAsync(
+            EntityFramework.Shared.Entities.WindDimension dimension, string contentString)
+        {
+            var webPath = $"{dimension.X}/{dimension.Y}";
+            var returnTime = "";
+            try
+            {
+                
+                var records = DeserializeGfsContent(dimension.Id, contentString);
+                foreach (var record in records)
+                {
+                    returnTime = record.ReferenceTime.ToString();
+                    await _gfsRepository.Add(record);
+                }
+
+                _logger.LogInformation($"Crawl GFS Wind Record Set : {webPath}");
+                return new CrawlResult() { Succeeded = true, Message = contentString };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Crawl GFS Wind Record Set Exception : {webPath}");
+                return new CrawlResult() { Succeeded = false, Exception = e };
+            }
+
+        }
 
         public async Task<CrawlResult> CrawlDimensionContentLevelAsync(EntityFramework.Shared.Entities.WindDimension dimension, SystemSettings currentSetting, int counter)
         {

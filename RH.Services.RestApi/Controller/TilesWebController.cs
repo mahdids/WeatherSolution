@@ -25,6 +25,8 @@ namespace RH.Services.RestApi.Controller
 
         public async Task<IActionResult> Index(short zoom, short x, short y)
         {
+
+            ViewBag.Borders = _dimensionManager.GetBorder();
             ViewBag.Zoom = zoom;
             ViewBag.X = x;
             ViewBag.Y = y;

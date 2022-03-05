@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using RH.EntityFramework.Common;
+using RH.EntityFramework.Shared.Entities;
 
 namespace RH.EntityFramework.Repositories.Dimension
 {
@@ -18,5 +19,6 @@ namespace RH.EntityFramework.Repositories.Dimension
         Task<bool> DeactivateDimensionAsync(int dimensionId);
 
         Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y, bool autoAdd = true);
+        DimensionBorder GetBorder();
     }
 }

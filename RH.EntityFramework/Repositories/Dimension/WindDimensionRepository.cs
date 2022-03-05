@@ -26,7 +26,7 @@ namespace RH.EntityFramework.Repositories.Dimension
             return await PagedList<Shared.Entities.WindDimension>.ToPagedList(_dbContext.WindDimensions, page, pageSize);
         }
 
-        public List<WindDimension> GetAllActiveDimensions() => _dbContext.WindDimensions.Where(x => x.IsActive).ToList();
+        public List<WindDimension> GetAllActiveDimensions() => _dbContext.WindDimensions.Where(x => x.IsActive).OrderBy(x => x.X).ThenBy(x => x.Y).ToList();
 
         public Task<WindDimension> this[int id] => throw new NotImplementedException();
 
@@ -75,8 +75,13 @@ namespace RH.EntityFramework.Repositories.Dimension
 
         public async Task<WindDimension> GetDimension(double x, double y, bool autoAdd = true)
         {
+            var near = await _dbContext.WindDimensions
+                .Select(w => new { Id = w.Id, Dis = Math.Pow(w.X - x, 2) + Math.Pow(w.Y - y, 2) })
+                .OrderBy(t => t.Dis).FirstOrDefaultAsync();
+            //var dimension =
+            //    await _dbContext.WindDimensions.FirstOrDefaultAsync(d => Math.Abs(d.X - x) <= 0.5 && Math.Abs(d.Y - y) <= 0.5);
             var dimension =
-                await _dbContext.WindDimensions.FirstOrDefaultAsync(d => Math.Abs(d.X - x) <= 0.5 && Math.Abs(d.Y - y) <= 0.5);
+                await _dbContext.WindDimensions.FirstOrDefaultAsync(d => d.Id == near.Id);
             if (dimension == null && autoAdd)
             {
                 dimension = new Shared.Entities.WindDimension()
@@ -89,6 +94,18 @@ namespace RH.EntityFramework.Repositories.Dimension
                 await _dbContext.SaveChangesAsync();
             }
             return dimension;
+        }
+
+        public DimensionBorder GetBorder()
+        {
+            return new DimensionBorder()
+            {
+
+                MinX = (int)_dbContext.WindDimensions.Min(x => x.X),
+                MaxX = (int)_dbContext.WindDimensions.Max(x => x.X),
+                MinY = (int)_dbContext.WindDimensions.Min(x => x.Y),
+                MaxY = (int)_dbContext.WindDimensions.Max(x => x.Y),
+            };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 
 namespace RH.Shared.Crawler.Dimension
@@ -11,5 +12,6 @@ namespace RH.Shared.Crawler.Dimension
         Task<EntityFramework.Shared.Entities.Dimension> GetDimension(short zoom, short x, short y, bool autoAdd = true);
 
         void ReloadDimensions();
+        DimensionBorder GetBorder();
     }
 }

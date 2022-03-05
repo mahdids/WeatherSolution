@@ -103,13 +103,13 @@ namespace RH.Services.Worker
                                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
                             break;
                     }
-                    services.AddHostedService<Worker>();
-                    services.AddHostedService<GfsWorker>();
-                    services.AddHostedService<EcmwfWorker>();
+                    //services.AddHostedService<Worker>();
+                    //services.AddHostedService<GfsWorker>();
+                    //services.AddHostedService<EcmwfWorker>();
 
                     services.AddHostedService<GfsWindWorker>();
-                    services.AddHostedService<GfsWindLevelsWorker>();
-                    services.AddHostedService<EcmwfWindWorker>();
+                    //services.AddHostedService<GfsWindLevelsWorker>();
+                    //services.AddHostedService<EcmwfWindWorker>();
 
                     services.AddTransient<IHttpClientFactory, HttpClientFactory>();
 

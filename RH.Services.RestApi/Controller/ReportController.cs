@@ -23,13 +23,23 @@ namespace RH.Services.RestApi.Controller
             var returnList = new List<ReportWebViewModel>();
             foreach (var item in dblist)
             {
+                var d = !item.Compeleted && dblist.Any(x => x.Type == item.Type && x.EndTime != null)
+                    ? item.StartTime.AddSeconds(dblist.Where(x => x.Type == item.Type && x.EndTime != null)
+                        .Average(x => ((DateTime)x.EndTime - x.StartTime).TotalSeconds))
+                    : item.EndTime;
+                if (!item.Compeleted&& dblist.Any(x => x.Type == item.Type && x.EndTime != null))
+                {
+                    var t = dblist.Where(x => x.Type == item.Type && x.EndTime != null)
+                        .Average(x => ((DateTime)x.EndTime - x.StartTime).TotalSeconds);
+                }
                 returnList.Add(new ReportWebViewModel()
                 {
                     Type = item.Type,
                     StartTime = item.StartTime,
-                    EndTime = item.EndTime,
+                    EndTime = !item.Compeleted&&dblist.Any(x=>x.Type==item.Type &&x.EndTime!=null)?item.StartTime.AddSeconds(dblist.Where(x=>x.Type==item.Type &&x.EndTime!=null).Average(x=>((DateTime)x.EndTime-x.StartTime).TotalSeconds)):item.StartTime.AddMinutes(250),
                     dateTime = item.dateTime,
-                    Compeleted = item.Compeleted
+                    Compeleted = item.Compeleted,
+                    
                 });
             }
             return View(returnList);

@@ -8,6 +8,7 @@ using RH.EntityFramework.Repositories.Settings;
 using RH.Shared.Crawler.Forecast.Wind;
 using RH.Shared.Crawler.WindDimension;
 using RH.EntityFramework.Repositories.Cycle;
+using RH.Shared.Crawler.Helper;
 
 namespace RH.Services.Worker.Workers
 {
@@ -47,15 +48,38 @@ namespace RH.Services.Worker.Workers
                         dateTime = time == default ? null : time,
                     };
                     await cycleRepository.AddCycleAsync(cycle);
-                    foreach (var dimension in dimensionManager.Dimensions)
+                    //foreach (var dimension in dimensionManager.Dimensions)
+                    //{
+                    var len = dimensionManager.Dimensions.Count;
+                    var currentround = 0;
+                    CrawlResult result = new CrawlResult() { Succeeded = true };
+                    for (int i = 0; i < len; i++)
                     {
+                        var dimension = dimensionManager.Dimensions[i];
                         if (activeId != systemSetting.ActiveSettingId)
                         {
                             currentSetting = await systemSetting.GetCurrentSetting();
                         }
-                        var result = await gfsCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
-                        if (result.Succeeded)
-                            returnTime = result.Message;
+                        if (currentround == 0)
+                        {
+                            result = await gfsCrawler.CrawlDimensionContentAsync(dimension, currentSetting);
+                            if (result.Succeeded)
+                                returnTime = result.Message;
+                            currentround++;
+                        }
+                        else
+                        {
+                            if (result.Succeeded)
+                            {
+                                result = await gfsCrawler.SetDimensionContentAsync(dimension, result.Message);
+                                if (result.Succeeded)
+                                    returnTime = result.Message;
+                            }
+
+                            currentround++;
+                        }
+                        if (currentround == currentSetting.Resolution)
+                            currentround = 0;
                     }
                     time = DateTime.Parse(returnTime).AddHours(3);
                     cycle.Compeleted = true;

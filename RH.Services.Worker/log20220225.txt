@@ -1,0 +1,19 @@
+2022-02-25 18:01:19.045 +03:30 [INF] ====================================================================
+2022-02-25 18:01:19.109 +03:30 [INF] Application Starts. Version: 1.0.0.0
+2022-02-25 18:01:19.109 +03:30 [INF] Application Directory: D:\Project-Friend\Ramin\Windy\Source\WeatherSolution\RH.Services.Worker\bin\Debug\netcoreapp3.1\
+2022-02-25 18:01:28.295 +03:30 [INF] GFS Wind Worker Starting
+2022-02-25 18:01:33.891 +03:30 [INF] GfsWind Start Round 0 , Current:2/25/2022 6:01:33 PM 
+2022-02-25 18:02:10.891 +03:30 [ERR] Crawl GFS Wind Record : https://node.windy.com/forecast/v3/gfs//0/15
+System.Net.Http.HttpRequestException: No such host is known.
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Http.ConnectHelper.ConnectAsync(String host, Int32 port, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.ConnectAsync(String host, Int32 port, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean allowHttp2, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttpConnectionAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithRetryAsync(HttpRequestMessage request, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.FinishSendAsyncBuffered(Task`1 sendTask, HttpRequestMessage request, CancellationTokenSource cts, Boolean disposeCts)
+   at RH.Shared.Crawler.Forecast.Wind.GfsWindCrawler.CrawlDimensionContentAsync(WindDimension dimension, SystemSettings currentSetting) in D:\Project-Friend\Ramin\Windy\Source\WeatherSolution\RH.Shared.Crawler\Forecast\Wind\GfsWindCrawler.cs:line 38

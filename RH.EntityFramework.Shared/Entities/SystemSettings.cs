@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,16 +9,16 @@ namespace RH.EntityFramework.Shared.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name="فعال/غیرفعال")]
-        public bool IsActive { get; set; }
-        [Display(Name ="تاریخ ایجاد")]
-        public DateTime CreateDate { get; set; }
-        [Display(Name = "تاریخ انقضا")]
+        [Display(Name = "فعال/غیرفعال")] public bool IsActive { get; set; }
+        [Display(Name = "تاریخ ایجاد")] public DateTime CreateDate { get; set; }
+        [Display(Name = "تاریخ انقضا")] public DateTime? EndDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
-        [Display(Name ="بازه ی فراخوانی(میلی ثانیه)")]
+        [Display(Name = "بازه ی فراخوانی(میلی ثانیه)")]
 
         public int CrawlingInterval { get; set; }
+
+        [DefaultValue(1)]
+        public int Resolution { get; set; }
 
         public BaseWorkerSetting BaseWorkerSetting { get; set; }
 
@@ -26,12 +27,16 @@ namespace RH.EntityFramework.Shared.Entities
         public WindDimensionsSetting WindDimensions { get; set; }
 
         public CrawlWebPath CrawlWebPath { get; set; }
+
+
+        //public string Geo { get; set; }
     }
 
     [Owned]
     public class CrawlWebPath
     {
         public string ForecastCityTileGFS { get; set; }
+
         public string ForecastCityTileECMWF { get; set; }
         public string ForecastWindGFS { get; set; }
         public string ForecastWindGFSLevel { get; set; }
@@ -43,6 +48,7 @@ namespace RH.EntityFramework.Shared.Entities
 
 
     }
+
     [Owned]
     public class WindDimensionsSetting
     {
@@ -52,6 +58,7 @@ namespace RH.EntityFramework.Shared.Entities
         public SettingPoint TopLeft { get; set; }
         public SettingPoint BottomRight { get; set; }
     }
+
     [Owned]
     public class DimensionsSetting
     {
@@ -60,12 +67,14 @@ namespace RH.EntityFramework.Shared.Entities
         public SettingPoint TopLeft { get; set; }
         public SettingPoint BottomRight { get; set; }
     }
+
     [Owned]
     public class SettingPoint
     {
         public int X { get; set; }
         public int Y { get; set; }
     }
+
     [Owned]
     public class BaseWorkerSetting
     {
@@ -74,5 +83,8 @@ namespace RH.EntityFramework.Shared.Entities
         public bool ReCrawlLabel { get; set; }
         public bool ReCrawlTileImage { get; set; }
     }
+
+    
+
 }
 

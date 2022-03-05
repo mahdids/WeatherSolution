@@ -44,6 +44,7 @@ namespace RH.Services.RestApi.Controller
             var activeSetting = await _settingRepository.GetActiveSystemSetting();
             var newModel = new SystemSettings()
             {
+                Resolution = activeSetting.Resolution,
                 CrawlingInterval = activeSetting.CrawlingInterval,
                 Dimension = activeSetting.Dimension,
                 WindDimensions = activeSetting.WindDimensions,

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RH.EntityFramework.Repositories.Dimension;
+using RH.EntityFramework.Shared.Entities;
 using RH.Shared.Crawler.Helper;
 
 namespace RH.Shared.Crawler.WindDimension
@@ -69,6 +70,10 @@ namespace RH.Shared.Crawler.WindDimension
         public void ReloadDimensions()
         {
             _dimensions = null;
+        }
+        public DimensionBorder GetBorder()
+        {
+            return _dimensionRepository.GetBorder();
         }
     }
 }

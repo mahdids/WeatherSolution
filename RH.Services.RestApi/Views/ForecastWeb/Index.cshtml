@@ -50,11 +50,11 @@
 
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <label asp-for="X" class="control-label">طول جغرافیایی</label>
-                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" />
+                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX" />
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <label asp-for="Y" class="control-label">عرض جغرافیایی</label>
-                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" />
+                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY"/>
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <label asp-for="Date" class="control-label">زمان</label>

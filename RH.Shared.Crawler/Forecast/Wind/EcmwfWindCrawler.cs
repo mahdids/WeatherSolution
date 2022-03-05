@@ -51,16 +51,39 @@ namespace RH.Shared.Crawler.Forecast.Wind
                     await _ecmwfRepository.Add(record);
                 }
 
-
-
                 _logger.LogInformation($"Crawl ECMWF Wind Recordd : {currentSetting.CrawlWebPath.ForecastWindECMWF}/{webPath}");
+                return new CrawlResult() { Succeeded = true, Message = contentString };
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Crawl ECMWF Wind Record Exception : {currentSetting.CrawlWebPath.ForecastWindECMWF}/{webPath}");
                 return new CrawlResult() { Succeeded = false, Exception = e };
             }
-            return new CrawlResult() { Succeeded = true };
+
+        }
+
+        public async Task<CrawlResult> SetDimensionContentAsync(
+            EntityFramework.Shared.Entities.WindDimension dimension, string contentString)
+        {
+            var webPath = $"{dimension.X}/{dimension.Y}";
+            try
+            {
+                
+                var records = await DeserializeEcmwfContent(dimension.Id, contentString);
+                foreach (var record in records)
+                {
+                    await _ecmwfRepository.Add(record);
+                }
+
+                _logger.LogInformation($"Crawl ECMWF Wind Record Set : {webPath}");
+                return new CrawlResult() { Succeeded = true, Message = contentString };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Crawl ECMWF Wind Record Set Exception : {webPath}");
+                return new CrawlResult() { Succeeded = false, Exception = e };
+            }
+
         }
         public async Task<string> GetDimensionContentAsync(EntityFramework.Shared.Entities.WindDimension dimension)
         {
@@ -101,9 +124,9 @@ namespace RH.Shared.Crawler.Forecast.Wind
                 return new List<EcmwfForecast>();
             }
 
-            var records = await _ecmwfRepository.GetContentByDimensionAndDateTime(dimension.Id, (DateTime) time);
+            var records = await _ecmwfRepository.GetContentByDimensionAndDateTime(dimension.Id, (DateTime)time);
             return records;
-            
+
         }
         private string SerializeEcmwfContent(List<EcmwfForecast> records)
         {
@@ -140,10 +163,10 @@ namespace RH.Shared.Crawler.Forecast.Wind
                 };
                 returnValue.Add(currentRecord);
             }
-            
+
             return returnValue;
         }
 
-       
+
     }
 }
