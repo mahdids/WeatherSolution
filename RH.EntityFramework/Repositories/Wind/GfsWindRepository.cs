@@ -87,9 +87,9 @@ namespace RH.EntityFramework.Repositories.Wind
                 .ToListAsync();
         }
         public async Task<List<GfsForecast>> GetContentByDimensionAndDateTime(int dimensionId,
-            ForecastLevel level, DateTime time)
+            List<ForecastLevel> level, DateTime time)
         {
-            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && x.Level == level && x.ReferenceTime == time).OrderBy(x => x.DateTime)
+            return await _dbContext.GfsForecasts.Where(x => x.WindDimensionId == dimensionId && level.Contains(x.Level) && x.ReferenceTime == time).OrderBy(x => x.DateTime)
                 .ToListAsync();
         }
         public async Task<DateTime> GetLastExistTime(int dimensionId)

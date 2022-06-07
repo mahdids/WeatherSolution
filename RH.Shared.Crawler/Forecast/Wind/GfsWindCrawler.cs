@@ -175,7 +175,7 @@ namespace RH.Shared.Crawler.Forecast.Wind
         }
 
         public async Task<List<GfsForecast>> GetDimensionContentByTimeAsync(
-            EntityFramework.Shared.Entities.WindDimension dimension, ForecastLevel level, DateTime dateTime)
+            EntityFramework.Shared.Entities.WindDimension dimension, List<ForecastLevel> level, DateTime dateTime)
         {
 
             var time = await _gfsRepository.GetNearestTime(dimension.Id, dateTime);

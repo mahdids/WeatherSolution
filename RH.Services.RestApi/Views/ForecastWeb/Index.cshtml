@@ -36,11 +36,16 @@
                                     </div>
                                     <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
                                         <label asp-for="Altitude" class="control-label">ارتفاع</label>
-                                        @Html.DropDownList("Altitude", 
-                                            Html.GetEnumSelectList<ForecastLevel>(),
-                                            "ارتفاع مورد نظر را انتخاب کنید",new { @class = "form-control" })
+                                        @{
+                                            var items = Html.GetEnumSelectList<ForecastLevel>().Select(x=>x.Text).ToList();
+                                            var altitudes = new MultiSelectList(items);
+                                            
+                                        }
+                                        @Html.DropDownList("altitude",
+                                            altitudes as MultiSelectList,
+                                            new { @class = "form-control", multiple = "multiple" })
                                         <!--<select asp-for="Altitude" asp-items="Html.GetEnumSelectList<ForecastLevel>()">-->
-                                            @*<select id="Altitude" name="Altitude" value="@ViewBag.Altitude" class="form-control">
+                                        @*<select id="Altitude" name="Altitude" value="@ViewBag.Altitude" class="form-control">
 
             <option value="GFS" selected="selected">GFS</option>
             <option value="ECMWF">ECMWF</option>*@
@@ -75,38 +80,38 @@
                                     <div class="card-block">
                                         <table class="table">
                                             <thead>
-                                                <tr>
-                                                    <th>ردیف</th>
-                                                    <th>مرجع زمانی</th>
-                                                    <th>زمان</th>
-                                                    <th>کد آب و هوا</th>
-                                                    <th>میزان بارش (میلیمتر)</th>
-                                                    <th>دما (کلوین)</th>
-                                                    <th>سرعت باد (متر بر ثانیه)</th>
-                                                    <th>جهت باد (درجه)</th>
-                                                    <th>فشار (hPa)<th>
-                                                </tr>
+                                            <tr>
+                                                <th>ردیف</th>
+                                                <th>مرجع زمانی</th>
+                                                <th>زمان</th>
+                                                <th>کد آب و هوا</th>
+                                                <th>میزان بارش (میلیمتر)</th>
+                                                <th>دما (کلوین)</th>
+                                                <th>سرعت باد (متر بر ثانیه)</th>
+                                                <th>جهت باد (درجه)</th>
+                                                <th>فشار (hPa)<th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                @{
-                                                    int index = 0;
-                                                    foreach (var record in Model.Forecasts)
-                                                    {
-                                                        index++;
-                                                        <tr>
-                                                            <td class="align-middle">@index</td>
-                                                            <td class="align-middle">@record.ReferenceTime</td>
-                                                            <td class="align-middle">@record.DateTime</td>
-                                                            <td class="align-middle">@record.WeatherCode</td>
-                                                            <td class="align-middle">@record.Mm.ToString("F2")</td>
-                                                            <td class="align-middle">@record.Temperature.ToString("F4")</td>
-                                                            <td class="align-middle">@record.Wind.ToString("F4")</td>
-                                                            <td class="align-middle">@record.WindDirection</td>
-                                                            <td class="align-middle">@record.Level</td>
-                                                        </tr>
-                                                    }
-
+                                            @{
+                                                int index = 0;
+                                                foreach (var record in Model.Forecasts)
+                                                {
+                                                    index++;
+                                                    <tr>
+                                                        <td class="align-middle">@index</td>
+                                                        <td class="align-middle">@record.ReferenceTime</td>
+                                                        <td class="align-middle">@record.DateTime</td>
+                                                        <td class="align-middle">@record.WeatherCode</td>
+                                                        <td class="align-middle">@record.Mm.ToString("F2")</td>
+                                                        <td class="align-middle">@record.Temperature.ToString("F4")</td>
+                                                        <td class="align-middle">@record.Wind.ToString("F4")</td>
+                                                        <td class="align-middle">@record.WindDirection</td>
+                                                        <td class="align-middle">@record.Level</td>
+                                                    </tr>
                                                 }
+
+                                            }
                                             </tbody>
                                         </table>
 
@@ -129,5 +134,29 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+
+        var list =  @Html.Raw(Json.Serialize(@ViewBag.Altitude));
+        
+        $('#altitude').multiselect({
+            includeSelectAllOption: true,
+            selectAllText: 'انتخاب همه'
+        });
+        $('#altitude').multiselect('select',list);
+        //var i = 0, size = list.length;
+        //for (i; i < size; i++) {
+        //    $('#altitude').multiselect('select', list[i]);
+        //}
+
+        //$("#altitude option").each(function(index, item) {
+        //    if (jQuery.inArray($(item).val(), list) != -1) {
+        //        $(this).prop("selected", true);
+        //    }
+        //});
+    });
+
+</script>
 
 

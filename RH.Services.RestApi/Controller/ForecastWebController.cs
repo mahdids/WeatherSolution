@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,7 @@ namespace RH.Services.RestApi.Controller
             _gfsCrawler = gfsCrawler;
         }
 
-        public async Task<IActionResult> Index(string forecastType,ForecastLevel Altitude, double x, double y, DateTime date)
+        public async Task<IActionResult> Index(string forecastType,List<ForecastLevel> altitude, double x, double y, DateTime date)
 
         {
             WindDimension dimension;
@@ -36,7 +37,7 @@ namespace RH.Services.RestApi.Controller
                 date = DateTime.Now;
             }
             ViewBag.Borders = _dimensionManager.GetBorder();
-            ViewBag.Altitude = Altitude;
+            ViewBag.Altitude = altitude.Select(x=>x.ToString());
             ViewBag.X = x;
             ViewBag.Y = y;
             ViewBag.Date = date.ToString("yyyy-MM-ddTHH:mm:ss");
@@ -63,7 +64,7 @@ namespace RH.Services.RestApi.Controller
 
                     case "GFS":
                     default:
-                        var result1 = await _gfsCrawler.GetDimensionContentByTimeAsync(dimension,Altitude, date);
+                        var result1 = await _gfsCrawler.GetDimensionContentByTimeAsync(dimension,altitude, date);
 
                         return View(new ForecastWebViewModel() { Forecasts = new List<Forecast>(result1), HasData = true });
                 }
