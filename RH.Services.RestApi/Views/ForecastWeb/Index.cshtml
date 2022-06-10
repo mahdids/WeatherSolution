@@ -19,9 +19,32 @@
                         <div class="col-md-12">
                             <form asp-controller="ForecastWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
-                                    <div class="col-md-6 col-lg-4 col-xl-1 mb-3">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="Altitude" class="control-label">ارتفاع</label>
+                                        @{
+                                            var items = Html.GetEnumSelectList<ForecastLevel>().Select(x => x.Text).ToList();
+                                            var altitudes = new MultiSelectList(items);
+
+                                        }
+                                        @Html.DropDownList("altitude",
+                                            altitudes as MultiSelectList,
+                                            new { @class = "form-control", multiple = "multiple", style = "height:37.47px !important" })
+
+                                    </div>
+
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="X" class="control-label">طول جغرافیایی</label>
+                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX" />
+                                    </div>
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="Y" class="control-label">عرض جغرافیایی</label>
+                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
                                         <label asp-for="forecastType" class="control-label">منبع</label>
-                                        <select id="forecastType" name="ForecastType" class="form-control" value="@ViewBag.ForecastType">
+                                        <select id="forecastType" name="ForecastType" class="form-control" style="height:37.47px !important" value="@ViewBag.ForecastType">
                                             @if (ViewBag.forecastType == "GFS")
                                             {
                                                 <option value="GFS" selected="selected">GFS</option>
@@ -34,39 +57,15 @@
                                             }
                                         </select>
                                     </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="Altitude" class="control-label">ارتفاع</label>
-                                        @{
-                                            var items = Html.GetEnumSelectList<ForecastLevel>().Select(x=>x.Text).ToList();
-                                            var altitudes = new MultiSelectList(items);
-                                            
-                                        }
-                                        @Html.DropDownList("altitude",
-                                            altitudes as MultiSelectList,
-                                            new { @class = "form-control", multiple = "multiple" })
-                                        <!--<select asp-for="Altitude" asp-items="Html.GetEnumSelectList<ForecastLevel>()">-->
-                                        @*<select id="Altitude" name="Altitude" value="@ViewBag.Altitude" class="form-control">
 
-            <option value="GFS" selected="selected">GFS</option>
-            <option value="ECMWF">ECMWF</option>*@
-
-                                        <!--</select>-->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="X" class="control-label">طول جغرافیایی</label>
-                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول جغرافیایی" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX" />
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="Y" class="control-label">عرض جغرافیایی</label>
-                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض جغرافیایی" class="form-control" min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY"/>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
                                         <label asp-for="Date" class="control-label">زمان</label>
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
                                     </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3 ">
+                                        <label class="control-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary form-control">جستجو</button>
+                                        @*<button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>*@
                                     </div>
                                 </div>
                             </form>
@@ -80,38 +79,39 @@
                                     <div class="card-block">
                                         <table class="table">
                                             <thead>
-                                            <tr>
-                                                <th>ردیف</th>
-                                                <th>مرجع زمانی</th>
-                                                <th>زمان</th>
-                                                <th>کد آب و هوا</th>
-                                                <th>میزان بارش (میلیمتر)</th>
-                                                <th>دما (کلوین)</th>
-                                                <th>سرعت باد (متر بر ثانیه)</th>
-                                                <th>جهت باد (درجه)</th>
-                                                <th>فشار (hPa)<th>
-                                            </tr>
+                                                <tr>
+                                                    <th>ردیف</th>
+                                                    <th>مرجع زمانی</th>
+                                                    <th>زمان</th>
+                                                    <th>کد آب و هوا</th>
+                                                    <th>میزان بارش (میلیمتر)</th>
+                                                    <th>دما (کلوین)</th>
+                                                    <th>سرعت باد (متر بر ثانیه)</th>
+                                                    <th>جهت باد (درجه)</th>
+                                                    <th>فشار (hPa)
+                                                    <th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            @{
-                                                int index = 0;
-                                                foreach (var record in Model.Forecasts)
-                                                {
-                                                    index++;
-                                                    <tr>
-                                                        <td class="align-middle">@index</td>
-                                                        <td class="align-middle">@record.ReferenceTime</td>
-                                                        <td class="align-middle">@record.DateTime</td>
-                                                        <td class="align-middle">@record.WeatherCode</td>
-                                                        <td class="align-middle">@record.Mm.ToString("F2")</td>
-                                                        <td class="align-middle">@record.Temperature.ToString("F4")</td>
-                                                        <td class="align-middle">@record.Wind.ToString("F4")</td>
-                                                        <td class="align-middle">@record.WindDirection</td>
-                                                        <td class="align-middle">@record.Level</td>
-                                                    </tr>
-                                                }
+                                                @{
+                                                    int index = 0;
+                                                    foreach (var record in Model.Forecasts)
+                                                    {
+                                                        index++;
+                                                        <tr>
+                                                            <td class="align-middle">@index</td>
+                                                            <td class="align-middle">@record.ReferenceTime</td>
+                                                            <td class="align-middle">@record.DateTime</td>
+                                                            <td class="align-middle">@record.WeatherCode</td>
+                                                            <td class="align-middle">@record.Mm.ToString("F2")</td>
+                                                            <td class="align-middle">@record.Temperature.ToString("F4")</td>
+                                                            <td class="align-middle">@record.Wind.ToString("F4")</td>
+                                                            <td class="align-middle">@record.WindDirection</td>
+                                                            <td class="align-middle">@record.Level</td>
+                                                        </tr>
+                                                    }
 
-                                            }
+                                                }
                                             </tbody>
                                         </table>
 
@@ -136,10 +136,10 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
 
         var list =  @Html.Raw(Json.Serialize(@ViewBag.Altitude));
-        
+
         $('#altitude').multiselect({
             includeSelectAllOption: true,
             selectAllText: 'انتخاب همه'
@@ -158,5 +158,25 @@
     });
 
 </script>
+<style>
+    .form-check-input {
+        margin-right: 0 !important;
+    }
+    .multiselect-native-select {
+        display: block;
+    }
+    .btn-group {
 
+        display: block;
+        font-size: 14px;
+        font-size: 0.875rem;
+        line-height: 1.25;
+        color: #607d8b;
+        background-color: #fff;
+        background-image: none;
+        background-clip: padding-box;
+      -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    }
+</style>
 

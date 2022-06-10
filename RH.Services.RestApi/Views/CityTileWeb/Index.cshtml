@@ -18,9 +18,24 @@
                         <div class="col-md-12">
                             <form asp-controller="CityTileWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
-                                    <div class="col-md-6 col-lg-4 col-xl-1 mb-3">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="Zoom" class="control-label">بزرگنمایی</label>
+                                        <input name="Zoom" value="@ViewBag.Zoom" type="number" placeholder="بزرگنمایی" class="form-control" min="@ViewBag.Borders.MinZ" max="@ViewBag.Borders.MaxZ" />
+                                    </div>
+
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="X" class="control-label">طول</label>
+                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX" />
+                                    </div>
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
+                                        <label asp-for="Y" class="control-label">عرض</label>
+                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض" class="form-control" min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
                                         <label asp-for="cityTileType" class="control-label">منبع</label>
-                                        <select id="cityTileType" name="cityTileType" class="form-control" value="@ViewBag.cityTileType">
+                                        <select id="cityTileType" name="cityTileType" class="form-control" style="height:37.47px !important" value="@ViewBag.cityTileType">
                                             @if (ViewBag.cityTileType == "GFS")
                                             {
                                                 <option value="GFS" selected="selected">GFS</option>
@@ -33,25 +48,15 @@
                                             }
                                         </select>
                                     </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="Zoom" class="control-label">بزرگنمایی</label>
-                                        <input name="Zoom" value="@ViewBag.Zoom" type="number" placeholder="بزرگنمایی" class="form-control" min="@ViewBag.Borders.MinZ" max="@ViewBag.Borders.MaxZ" />
-                                    </div>
 
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="X" class="control-label">طول</label>
-                                        <input name="X" value="@ViewBag.X" type="number" placeholder="طول" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX"/>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
-                                        <label asp-for="Y" class="control-label">عرض</label>
-                                        <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض" class="form-control" min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY"/>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3">
                                         <label asp-for="Date" class="control-label">زمان</label>
                                         <input name="Date" value="@ViewBag.Date" type="datetime-local" placeholder="زمان" class="form-control" />
                                     </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>
+                                    <div class="col-md-4 col-lg-4 col-xl-4 mb-3 ">
+                                        <label class="control-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary form-control">جستجو</button>
+                                        @*<button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">جستجو</button>*@
                                     </div>
                                 </div>
                             </form>

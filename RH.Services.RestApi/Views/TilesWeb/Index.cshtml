@@ -19,22 +19,24 @@
                             <form asp-controller="TilesWeb" asp-action="Index" method="get" class="form-horizontal ">
                                 <div class="form-group row">
 
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                                         <label asp-for="Zoom" class="control-label">بزرگنمایی</label>
                                         <input name="Zoom" value="@ViewBag.Zoom" type="number" placeholder="بزرگنمایی" class="form-control" min="@ViewBag.Borders.MinZ" max="@ViewBag.Borders.MaxZ" />
                                     </div>
 
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                                         <label asp-for="X" class="control-label">طول</label>
                                         <input name="X" value="@ViewBag.X" type="number" placeholder="طول" class="form-control" min="@ViewBag.Borders.MinX" max="@ViewBag.Borders.MaxX"/>
                                     </div>
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                                    <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                                         <label asp-for="Y" class="control-label">عرض</label>
                                         <input name="Y" value="@ViewBag.Y" type="number" placeholder="عرض" class="form-control"min="@ViewBag.Borders.MinY" max="@ViewBag.Borders.MaxY"/>
                                     </div>
 
-                                    <div class="col-md-6 col-lg-4 col-xl-2 mb-3 pull-left">
-                                        <button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">دریافت کاشی</button>
+                                    <div class="col-md-6 col-lg-3 col-xl-3 mb-3 ">
+                                        <label  class="control-label">&nbsp;</label>
+                                        @*<button type="submit" style="position: absolute; bottom: 0px;" class="btn btn-primary w-100">دریافت کاشی</button>*@
+                                        <button type="submit"  class="btn btn-primary form-control">دریافت کاشی</button>
                                     </div>
                                 </div>
 
